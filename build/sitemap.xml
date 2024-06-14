@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://balkarjun.github.io/</loc>
+    </url>
+    <url>
+        <loc>https://balkarjun.github.io/blog/</loc>
+    </url>
+    <url>
+        <loc>https://balkarjun.github.io/blog/minimax-connect-four/</loc>
+        <lastmod>2024-06-15</lastmod>
+    </url>
+    <url>
+        <loc>https://balkarjun.github.io/projects/</loc>
+    </url>
+    <url>
+        <loc>https://balkarjun.github.io/projects/ciphers/</loc>
+        <lastmod>2023-05-10</lastmod>
+    </url>
+    <url>
+        <loc>https://balkarjun.github.io/projects/connect-four-ai/</loc>
+        <lastmod>2024-05-01</lastmod>
+    </url>
+    <url>
+        <loc>https://balkarjun.github.io/projects/fungi-cv/</loc>
+        <lastmod>2024-06-01</lastmod>
+    </url>
+    <url>
+        <loc>https://balkarjun.github.io/projects/taptrack/</loc>
+        <lastmod>2023-06-01</lastmod>
+    </url>
+</urlset>

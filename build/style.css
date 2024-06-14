@@ -1,0 +1,219 @@
+:root {
+    --blue: #0273b2;
+    --blue-subtle: #dff4ff;
+    --orange: #da6512;
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-family: 'IBM Plex Sans';
+    font-size: 1.1em;
+    line-height: 1.4;
+    color: #222222;
+    max-width: 700px;
+    margin: 2em auto;
+    padding: 0 0.8em;
+    overflow-y: scroll;
+}
+
+header {
+    margin-bottom: 2em;
+}
+
+header span {
+    display: block;
+    font-size: 1.25em;
+    font-weight: 600;
+    color: var(--orange);
+}
+
+nav a {
+    color: #222222;
+    text-decoration: none;
+    padding-right: 0.4em;
+    font-weight: 500;
+}
+
+nav a:hover, .nav-active {
+    text-decoration: underline;
+}
+
+footer {
+    font-size: 0.9em;
+    color: #666666;
+    margin-top: 1em;
+}
+
+footer strong {
+    font-weight: 500;
+}
+
+footer a {
+    color: #666666;
+    text-decoration-color: #eeeeee;
+}
+
+footer a:hover {
+    text-decoration-color: #666666;
+}
+
+h1, h2, h3, h4 {
+    line-height: 1.2;
+}
+
+h2, h3 {
+    margin-top: 1em;
+    font-weight: 600;
+}
+
+h2 + p, h3 + p {
+    margin-top: 0.4em;
+}
+
+img {
+    max-width: 100%;
+}
+
+table {
+    width: 100%;
+    margin: 1em 0;
+    border-collapse: collapse;
+    line-height: normal;
+}
+
+th, td {
+    border: 1px solid #dddddd;
+}
+
+th {
+    background-color: #f6f6f6;
+    padding: 0.25em 0.5em;
+    text-align: left;
+}
+
+th em {
+    font-weight: 500;
+}
+
+td {
+    padding: 0.1em 0.5em;
+}
+
+pre {
+    padding: 1em;
+    margin: 1em 0;
+    overflow-x: auto;
+    border: 1px solid #dddddd;
+}
+
+code {
+    font-family: 'IBM Plex Mono';
+    font-size: 0.9em;
+    line-height: 1.1;
+}
+
+img + em {
+    display: block;
+    text-align: center;
+    color: #666666;
+}
+
+p {
+    text-align: justify;
+    margin-top: 0.8em;
+}
+
+p code {
+    color: #666666;
+    font-weight: 500;
+    padding: 0 0.3em;
+    border: 1px solid #eeeeee;
+    border-radius: 0.2em;
+}
+
+sup {
+    line-height: 0;
+    font-size: 0.8em;
+}
+
+a {
+    color: var(--blue);
+    text-decoration-color: var(--blue-subtle);
+}
+
+a:hover {
+    text-decoration-color: var(--blue);
+}
+
+/* Blog Page */
+.blog-page ul {
+    list-style-position: inside;
+    margin: 0.8em 0;
+    margin-left: 1em;
+}
+
+.blog-page img {
+    display: block;
+    margin: 0 auto;
+}
+
+/* List of Blogs  */
+.blog ul {
+    list-style-type: none;
+}
+
+.blog ul a {
+    color: #222222;
+    text-decoration: underline;
+    text-decoration-color: #cccccc;
+}
+
+.blog ul span {
+    margin-left: 0.1em;
+    color: #999999;
+}
+
+/* List of Projects */
+.projects ul {
+    list-style-type: none;
+}
+
+.projects li div h3 {
+    display: inline;
+}
+
+.projects li div + p {
+    margin-top: 0.4em;
+}
+
+.projects li p strong {
+    font-weight: 600;
+}
+
+.projects li {
+    margin: 2em 0;
+}
+
+.projects .links {
+    margin-top: 0.2em;
+}
+
+.projects .links a, .button-link {
+    font-size: 0.9em;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 0.2em 0.8em;
+    background-color: var(--blue-subtle);
+    border-radius: 0.2em;
+}
+
+.projects .project-date {
+    color: #666666;
+    padding-left: 0.1em;
+    font-size: 0.9em;
+}

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>balkarjun</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400;1,500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>    
+    
+<header>
+    <span>Arjun Balakrishnan</span>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/blog" class="nav-active">Blog</a>
+        <a href="/projects">Projects</a>
+    </nav>
+</header>
+
+<section class="blog-page">
+    <h1>
+        Exploring Board Game AI Algorithms: Minimax
+    </h1>
+    <em>
+        Published on 15 June 2024
+    </em>
+
+    <div>
+        <p>Computers are <em>very</em> good at playing board games. Traditionally for games like Chess, algorithms like Minimax and Alpha-Beta Pruning were used to search for moves. More recently, techniques like Monte-Carlo Tree Search and Reinforcement Learning have made these AIs more formidable. </p>
+<p>To learn more about these algorithms, I decided to implement them from scratch. These algorithms can be applied to most board games. I chose Connect Four because it is simpler than a game like Chess or Go, but not as trivial as Tic-Tac-Toe. </p>
+<p>For those unfamiliar, Connect Four is played on a 6x7 board where two players, White and Black (Red and Yellow are used in the original game), take turns dropping their coins into one of the columns. The first player to line up 4 of their coins wins.</p>
+<p>
+    <img src="assets/Example_Game.png" height="260" alt="Illustration of a Connect Four game">
+    <em>A Connect Four game. Black wins with a diagonal 4-in-a-row</em>
+</p>
+<h2 id="making-a-playable-game">Making a Playable Game</h2>
+<p>My approach when writing code is to write the simple solution first, <em>then</em> spend time making it better. This stops me from over-generalizing the solution early on, and provides the necessary context for optimizations later. For Connect Four, we only need three things to make a playable game:</p>
+<h3 id="representing-the-board">Representing the Board</h3>
+<p>We use a 2D array to represent the board. We set a cell to a player's value to indicate that the player's coin is in that cell. A value of <code>0</code> indicates an empty cell.</p>
+<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span>nrows </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">6
+</span><span>ncols </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">7
+</span><span>
+</span><span style="color:#bbbbbb;"># value representing each player
+</span><span>white </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">1
+</span><span>black </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">2
+</span><span>
+</span><span style="color:#bbbbbb;"># there are 6*7 = 42 cells
+</span><span>board </span><span style="font-weight:bold;color:#202020;">= </span><span>[
+</span><span>    [</span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>],
+</span><span>    [</span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>],
+</span><span>    [</span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>],
+</span><span>    [</span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>],
+</span><span>    [</span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>],
+</span><span>    [</span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>],
+</span><span>]
+</span></code></pre>
+<h3 id="making-a-move">Making a Move</h3>
+<p>We place the player's coin at the bottom-most empty cell in the column.</p>
+<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span style="font-weight:bold;color:#202020;">def </span><span>make_move(board, player, icol):
+</span><span>    </span><span style="font-weight:bold;color:#202020;">for </span><span>irow </span><span style="font-weight:bold;color:#202020;">in </span><span>range(nrows </span><span style="font-weight:bold;color:#202020;">- </span><span style="color:#707070;">1</span><span>, </span><span style="font-weight:bold;color:#202020;">-</span><span style="color:#707070;">1</span><span>, </span><span style="font-weight:bold;color:#202020;">-</span><span style="color:#707070;">1</span><span>):
+</span><span>        </span><span style="font-weight:bold;color:#202020;">if </span><span>board[irow][icol] </span><span style="font-weight:bold;color:#202020;">== </span><span style="color:#707070;">0</span><span>:
+</span><span>            board[irow][icol] </span><span style="font-weight:bold;color:#202020;">= </span><span>player
+</span><span>            </span><span style="font-weight:bold;color:#202020;">return </span><span>True
+</span><span>    
+</span><span>    </span><span style="font-weight:bold;color:#202020;">return </span><span>False
+</span></code></pre>
+<h3 id="checking-wins">Checking Wins</h3>
+<p>There are 69 ways to get a 4-in-a-row — 24 ways horizontally, 21 vertically and 24 along the two diagonals. Here's the code to check the positive diagonal:</p>
+<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span style="font-weight:bold;color:#202020;">for </span><span>irow </span><span style="font-weight:bold;color:#202020;">in </span><span>range(nrows </span><span style="font-weight:bold;color:#202020;">- </span><span style="color:#707070;">3</span><span>):
+</span><span>    </span><span style="font-weight:bold;color:#202020;">for </span><span>icol </span><span style="font-weight:bold;color:#202020;">in </span><span>range(</span><span style="color:#707070;">3</span><span>, ncols):
+</span><span>        </span><span style="font-weight:bold;color:#202020;">if </span><span>(board[irow][icol] </span><span style="font-weight:bold;color:#202020;">!= </span><span style="color:#707070;">0</span><span>) </span><span style="font-weight:bold;color:#202020;">and </span><span>(board[irow][icol] </span><span style="font-weight:bold;color:#202020;">== </span><span>board[irow </span><span style="font-weight:bold;color:#202020;">+ </span><span style="color:#707070;">1</span><span>][icol </span><span style="font-weight:bold;color:#202020;">- </span><span style="color:#707070;">1</span><span>] </span><span style="font-weight:bold;color:#202020;">== </span><span>board[irow </span><span style="font-weight:bold;color:#202020;">+ </span><span style="color:#707070;">2</span><span>][icol </span><span style="font-weight:bold;color:#202020;">- </span><span style="color:#707070;">2</span><span>] </span><span style="font-weight:bold;color:#202020;">== </span><span>board[irow </span><span style="font-weight:bold;color:#202020;">+ </span><span style="color:#707070;">3</span><span>][icol </span><span style="font-weight:bold;color:#202020;">- </span><span style="color:#707070;">3</span><span>]):
+</span><span>            </span><span style="font-weight:bold;color:#202020;">return </span><span>board[irow][icol]
+</span></code></pre>
+<p>Checking the other directions is just as easy.</p>
+<p>With that, and a bit of code to handle player turns, we're done! We could stop here and we'd have a basic two-player game. </p>
+<h2 id="creating-our-ai-opponent">Creating our AI Opponent</h2>
+<p>Suppose you are now playing against an AI. You start by placing a coin in the middle column. The AI could respond by placing its coin in any one of the seven columns. How does it figure out which of those columns is the best one?</p>
+<h3 id="minimax-and-negamax">Minimax and Negamax</h3>
+<p>Consider a simplified search tree as shown, where there are only three possible responses to a move, and we search 2 moves deep. Each node represents a position that could result form a move. The numbers at the bottom represent scores for a position, where a higher score is more favourable for White, and a lower score is more favourable for Black. The blue lines represent the best move for a node.</p>
+<p><img src="https://balkarjun.github.io/blog/minimax-connect-four/assets/Minimax_Search_Tree.png" alt="Illustration of a minimax search tree" />
+<em>Minimax search tree</em></p>
+<p>A White node picks the path that leads to the highest score, while a Black node picks the path that leads to the lowest score. This way, a player can pick the best move out of all possibilities. This idea forms the basis for the <strong>minimax</strong> algorithm.</p>
+<p>But how do we find the scores? Ideally, instead of just looking 2 moves deep, the AI should look through <em>all</em> possible moves until the end of the game. Depending on who wins in a position, we could assign a score (+100 for a win by White, 0 for a tie, -100 for a win by Black). But this is impractical.</p>
+<p>Since there are 7 possible responses to any move (assuming none of the columns are filled), if the AI looks 1 move deep, that's 7 positions to consider. At 2 moves deep, that's 7<sup>2</sup> = 49 positions. At 10 moves deep, that number grows to about a quarter of a Billion. A Connect Four game can have upto 42 moves, and it turns out that there are about 4.5 Trillion unique <a rel="noopener" target="_blank" href="https://oeis.org/A212693">positions</a>! That's too much to search through.</p>
+<p>But there's another way. Consider the position shown below, where most of White's coins are blocked but Black has several open spots. Black has a clear advantage.</p>
+<p>
+    <img src="assets/Example_Position.png" height="260" alt="Illustration of a Connect Four game">
+    <em>Position with an advantage for Black</em>
+</p>
+<p>If we could convert this information into a score, we could limit the search depth to, say 5 moves deep, which comes out to around 16,000 positions. At the end of the search, if we haven't reached an end state (win/tie), we could use this score instead. </p>
+<p>This is done in board games using a <strong>heuristic</strong> function, that takes in a board position and outputs a score. </p>
+<p>Creating an accurate (and fast) heuristic is hard. I spent an ungodly amount of time trying to come up with one, and when that failed, I looked to others for inspiration: </p>
+<ul>
+<li><a rel="noopener" target="_blank" href="https://roadtolarissa.com/connect-4-ai-how-it-works/">Adam Pearce</a> generates a score based on the number of open cells that can lead to a 4-in-a-row.</li>
+<li><a rel="noopener" target="_blank" href="https://tleemann.de/four.html">Tobias Leemann</a> uses a pre-trained neural network as an evaluator.</li>
+<li><a rel="noopener" target="_blank" href="https://connect4.gamesolver.org/">Pascal Pons</a> does not use a heuristic, since the AI computes the exact outcome of a position, made possible through tons of clever optimizations.</li>
+</ul>
+<p>I ended up using a different approach that I found <a rel="noopener" target="_blank" href="https://file.scirp.org/Html/1-9601415_90972.htm">here</a>. It might not be as effective as other heuristics, but it's so simple that it's crazy it even works as well as it does. </p>
+<p>Here's how it works. We assign a value to each cell in the board, based on the number of 4-in-a-rows possible from that cell. For example, from the bottom-left cell, you can get 4-in-a-row in three ways, so its value is 3.</p>
+<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span>scoremap </span><span style="font-weight:bold;color:#202020;">= </span><span>[
+</span><span>    [</span><span style="color:#707070;">3</span><span>, </span><span style="color:#707070;">4</span><span>,  </span><span style="color:#707070;">5</span><span>,  </span><span style="color:#707070;">7</span><span>,  </span><span style="color:#707070;">5</span><span>, </span><span style="color:#707070;">4</span><span>, </span><span style="color:#707070;">3</span><span>],
+</span><span>    [</span><span style="color:#707070;">4</span><span>, </span><span style="color:#707070;">6</span><span>,  </span><span style="color:#707070;">8</span><span>,  </span><span style="color:#707070;">9</span><span>,  </span><span style="color:#707070;">8</span><span>, </span><span style="color:#707070;">6</span><span>, </span><span style="color:#707070;">4</span><span>],
+</span><span>    [</span><span style="color:#707070;">5</span><span>, </span><span style="color:#707070;">8</span><span>, </span><span style="color:#707070;">11</span><span>, </span><span style="color:#707070;">13</span><span>, </span><span style="color:#707070;">11</span><span>, </span><span style="color:#707070;">8</span><span>, </span><span style="color:#707070;">5</span><span>],
+</span><span>    [</span><span style="color:#707070;">5</span><span>, </span><span style="color:#707070;">8</span><span>, </span><span style="color:#707070;">11</span><span>, </span><span style="color:#707070;">13</span><span>, </span><span style="color:#707070;">11</span><span>, </span><span style="color:#707070;">8</span><span>, </span><span style="color:#707070;">5</span><span>],
+</span><span>    [</span><span style="color:#707070;">4</span><span>, </span><span style="color:#707070;">6</span><span>,  </span><span style="color:#707070;">8</span><span>,  </span><span style="color:#707070;">9</span><span>,  </span><span style="color:#707070;">8</span><span>, </span><span style="color:#707070;">6</span><span>, </span><span style="color:#707070;">4</span><span>],
+</span><span>    [</span><span style="color:#707070;">3</span><span>, </span><span style="color:#707070;">4</span><span>,  </span><span style="color:#707070;">5</span><span>,  </span><span style="color:#707070;">7</span><span>,  </span><span style="color:#707070;">5</span><span>, </span><span style="color:#707070;">4</span><span>, </span><span style="color:#707070;">3</span><span>]
+</span><span>]
+</span></code></pre>
+<p>White's score is the sum of cell values for all cells containing a White coin. Black's score is obtained in a similar way. The overall score of the position is the difference between these two values. For the position shown earlier, White's score is <code>58</code> and Black's score is <code>66</code>, making the total score <code>-8</code>, which accurately depicts an advantage for Black.</p>
+<p>We now have everything we need to implement minimax, but there is one small inconvenice, demonstrated in the example below.</p>
+<p><img src="https://balkarjun.github.io/blog/minimax-connect-four/assets/Negamax.png" alt="Illustration of two search trees. On the left, a white node that picks the highest-valued child node. On the right, a black node that picks the lowest-valued child node." />
+<em>Searching one move ahead</em></p>
+<p>White picks <code>max(10, 20, 30)</code> and Black picks <code>min(10, 20, 30)</code>. This means we have to toggle between finding the maximum or minimum score depending on if the AI is looking at a White or Black node. </p>
+<p>But notice that <code>min(a, b) = -max(-a, -b)</code>. So finding <code>min(10, 20, 30)</code> is equivalent to finding <code>-max(-10, -20, -30)</code>. Toggling between the players is now as simple as flipping the signs. This idea gives us the <strong>negamax</strong> algorithm, a variant of minimax that is identical in every way except that it has a simpler implementation.</p>
+<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span style="font-weight:bold;color:#202020;">def </span><span>negamax(board, player, depth):
+</span><span>    </span><span style="font-weight:bold;color:#202020;">if </span><span>depth </span><span style="font-weight:bold;color:#202020;">== </span><span style="color:#707070;">0 </span><span style="font-weight:bold;color:#202020;">or </span><span>end_state_reached(board):
+</span><span>        </span><span style="font-weight:bold;color:#202020;">return </span><span>evaluate(board), </span><span style="font-weight:bold;color:#202020;">-</span><span style="color:#707070;">1
+</span><span>    
+</span><span>    best_score </span><span style="font-weight:bold;color:#202020;">= -</span><span style="color:#707070;">1_000_000
+</span><span>    best_move  </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">0
+</span><span>    
+</span><span>    sign </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">1 </span><span style="font-weight:bold;color:#202020;">if </span><span>(player </span><span style="font-weight:bold;color:#202020;">== </span><span>white) </span><span style="font-weight:bold;color:#202020;">else -</span><span style="color:#707070;">1
+</span><span>    
+</span><span>    </span><span style="font-weight:bold;color:#202020;">for </span><span>icol </span><span style="font-weight:bold;color:#202020;">in </span><span>range(ncols):
+</span><span>        </span><span style="color:#bbbbbb;"># skip filled columns
+</span><span>        </span><span style="font-weight:bold;color:#202020;">if </span><span>board[</span><span style="color:#707070;">0</span><span>][icol] </span><span style="font-weight:bold;color:#202020;">!= </span><span style="color:#707070;">0</span><span>:
+</span><span>            </span><span style="font-weight:bold;color:#202020;">continue
+</span><span>        
+</span><span>        make_move(board, player, icol)
+</span><span>        score </span><span style="font-weight:bold;color:#202020;">= </span><span>negamax(board, switch(player), depth </span><span style="font-weight:bold;color:#202020;">- </span><span style="color:#707070;">1</span><span>)[</span><span style="color:#707070;">0</span><span>]
+</span><span>        undo_move(board, player, icol)
+</span><span>
+</span><span>        score </span><span style="font-weight:bold;color:#202020;">*= </span><span>sign
+</span><span>        </span><span style="font-weight:bold;color:#202020;">if </span><span>score </span><span style="font-weight:bold;color:#202020;">&gt; </span><span>best_score:
+</span><span>            best_score </span><span style="font-weight:bold;color:#202020;">= </span><span>score
+</span><span>            best_move  </span><span style="font-weight:bold;color:#202020;">= </span><span>icol
+</span><span>    
+</span><span>    best_score </span><span style="font-weight:bold;color:#202020;">*= </span><span>sign
+</span><span>    </span><span style="font-weight:bold;color:#202020;">return </span><span>best_score, best_move
+</span></code></pre>
+<p>We need an <code>undo_move</code> since <code>make_move</code> modifies the board and we don't want that modification to be permanent.</p>
+<p>With that, we have a pretty decent AI. I can just about squeeze a win at a search depth of 4, but the AI gets the better of me at greater depths (I'm not very good at this game). It's more fun to have the AIs fight each other. </p>
+<p>In fact, the game that was shown at the very start of this post is what happened in a Depth 6 vs Depth 7 match. Despite the slight disadvantage of going second, Black won because it was able to search to a greater depth and find stronger moves.</p>
+<h2 id="making-the-ai-stronger">Making the AI Stronger</h2>
+<p>On my Apple M1 running Python 3.10, it takes about 20 seconds for the AI to make a move at depth 8. It takes much longer at the start, and gets faster as more moves are made, since the time taken depends on how many positions the AI has to evaluate. Here's what that looks like at various depths:</p>
+<table><thead><tr><th>Depth</th><th>Mean Evals</th><th>Mean Time <em>(sec)</em></th><th>Evals / sec</th></tr></thead><tbody>
+<tr><td>5</td><td>7,783</td><td>0.092</td><td>84,597</td></tr>
+<tr><td>6</td><td>50,656</td><td>0.588</td><td>86,149</td></tr>
+<tr><td>7</td><td>376,705</td><td>4.368</td><td>86,241</td></tr>
+<tr><td>8</td><td>1,979,791</td><td>23.198</td><td>85,343</td></tr>
+</tbody></table>
+<p>Mean Time at Depth 8: <strong>23.2 sec</strong></p>
+<p>There are two clear candidates for improvement: Reducing <code>Mean Evals</code> and increasing <code>Evals/sec</code>.</p>
+<h3 id="optimization-1-searching-fewer-nodes-with-alpha-beta-pruning">Optimization #1 <br> Searching Fewer Nodes with Alpha-Beta Pruning</h3>
+<p><img src="https://balkarjun.github.io/blog/minimax-connect-four/assets/AlphaBeta_Pruning.png" alt="Illustration of a minimax search tree with two pruned branches" />
+<em>Pruning two branches of the search tree</em></p>
+<p>Let's look at the minimax search tree again. As we evaluate nodes from left to right, notice what happens when we reach the highlighted node (with value 20). The Black node's value is set to 20 since that's the lowest score found so far. There are now two possibilies:</p>
+<ul>
+<li>If either of the two remaining nodes have a value less than 20, the Black node's value will be updated to this lower value.</li>
+<li>If the two remaining nodes have a value greater than or equal to 20, the Black node's value will remain unchanged.</li>
+</ul>
+<p>In either case, without evaluating the two remaining nodes, we can be certain that the value of the Black node will be less than or equal to 20. Since that's the case, White (which wants to maximize its score) will never choose this path, since it already has a path that guarantees a score of 30. This means we can completely ignore those two child nodes. So instead of evaluating 9 nodes, we only have to evaluate 7. This seems like a minor improvement, but the benefits pile up as the search depth increases.</p>
+<p>In simpler terms, we ignore or <em>prune</em> branches of the search tree that can only lead to a worse score, but still explore paths that could lead to a better score. This technique is called <strong>alpha-beta pruning</strong>.</p>
+<p>Learning and implementing this took me quite a while, but here's the gist of how I went about it. Instead of using just one value to track the best score, we use two — <code>alpha</code>, the current player's best score and <code>beta</code>, the opponent's best score.</p>
+<p>For example, if the current player is White, <code>alpha</code> starts at <code>-infinity</code> and can increase as we find better moves, and <code>beta</code> starts at <code>+infinity</code> and can decrease as the opponent finds better moves. When <code>alpha &gt;= beta</code>, we've reached a situation as shown in the example and we don't need to search any further.</p>
+<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span style="font-weight:bold;color:#202020;">def </span><span>negamax(board, player, alpha, beta, depth):
+</span><span>    ...
+</span><span>    </span><span style="font-weight:bold;color:#202020;">for </span><span>icol </span><span style="font-weight:bold;color:#202020;">in </span><span>range(ncols):
+</span><span>        ...
+</span><span>        score </span><span style="font-weight:bold;color:#202020;">= </span><span>negamax(board, switch(player), beta, alpha, depth </span><span style="font-weight:bold;color:#202020;">- </span><span style="color:#707070;">1</span><span>)[</span><span style="color:#707070;">0</span><span>]
+</span><span>        ...
+</span><span>
+</span><span>        </span><span style="font-weight:bold;color:#202020;">if </span><span>sign</span><span style="font-weight:bold;color:#202020;">*</span><span>score </span><span style="font-weight:bold;color:#202020;">&gt; </span><span>sign</span><span style="font-weight:bold;color:#202020;">*</span><span>alpha:
+</span><span>            alpha </span><span style="font-weight:bold;color:#202020;">= </span><span>score
+</span><span>            best_move </span><span style="font-weight:bold;color:#202020;">= </span><span>icol
+</span><span>
+</span><span>        </span><span style="font-weight:bold;color:#202020;">if </span><span>sign</span><span style="font-weight:bold;color:#202020;">*</span><span>alpha </span><span style="font-weight:bold;color:#202020;">&gt;= </span><span>sign</span><span style="font-weight:bold;color:#202020;">*</span><span>beta:
+</span><span>            </span><span style="font-weight:bold;color:#202020;">break
+</span><span>
+</span><span>    </span><span style="font-weight:bold;color:#202020;">return </span><span>alpha, best_move
+</span></code></pre>
+<p>Comparing regular minimax to minimax with alpha-beta pruning, we see a <em>huge</em> reduction in the number of evaluations:</p>
+<table><thead><tr><th>Depth</th><th>Mean Evals <br> <em>minimax</em></th><th>Mean Evals <br> <em>alpha-beta</em></th></tr></thead><tbody>
+<tr><td>5</td><td>7,783</td><td>1,422</td></tr>
+<tr><td>6</td><td>50,656</td><td>3,484</td></tr>
+<tr><td>7</td><td>376,705</td><td>18,597</td></tr>
+<tr><td>8</td><td>1,979,791</td><td>37,656</td></tr>
+</tbody></table>
+<p>That's 50x fewer nodes at depth 8! The speed improves by almost the same factor.<br />
+Mean Time at Depth 8: <strong>0.51 sec</strong></p>
+<p>The best part about alpha-beta pruning is that the moves found will be the exact same as regular minimax, it just does so by searching fewer nodes. </p>
+<h3 id="optimization-2-speeding-up-evaluations-with-bitboards">Optimization #2 <br> Speeding up Evaluations with Bitboards</h3>
+<p>If you'd like a thorough explanation of bitboards and how to implement them for Connect Four, check out <a rel="noopener" target="_blank" href="https://www.github.com/denkspuren/BitboardC4/blob/master/BitboardDesign.md">this excellent resource</a>.</p>
+<p>The basic idea is this — instead of using an array, we will use a 64-bit number to represent the game board. This data structure, called a <strong>bitboard</strong>, is commonly used in board games to efficiently represent the game state. The bits (numbered 0 to 63) are laid out as shown:</p>
+<pre style="background-color:#ffffff;color:#202020;"><code><span>  6 13 20 27 34 41 48   55 62   
+</span><span> —————————————————————          
+</span><span>│ 5 12 19 26 33 40 47 │ 54 61   
+</span><span>│ 4 11 18 25 32 39 46 │ 53 60   
+</span><span>│ 3 10 17 24 31 38 45 │ 52 59   
+</span><span>│ 2  9 16 23 30 37 44 │ 51 58   
+</span><span>│ 1  8 15 22 29 36 43 │ 50 57   
+</span><span>│ 0  7 14 21 28 35 42 │ 49 56 63
+</span><span> —————————————————————          
+</span></code></pre>
+<p>A cell can have one of three states — It's either empty, has a White coin, or has a Black coin. We can represent this using two bitboards, one for each player. The entire game state can now be represented with just these values:</p>
+<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span>bitboards </span><span style="font-weight:bold;color:#202020;">= </span><span>[
+</span><span>    </span><span style="color:#707070;">0b0000000000000000000000000000000000000000000000000000000000000000</span><span>,
+</span><span>    </span><span style="color:#707070;">0b0000000000000000000000000000000000000000000000000000000000000000
+</span><span>]
+</span><span>counter </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">0
+</span><span>heights </span><span style="font-weight:bold;color:#202020;">= </span><span>[</span><span style="color:#707070;">0</span><span>,  </span><span style="color:#707070;">7</span><span>, </span><span style="color:#707070;">14</span><span>, </span><span style="color:#707070;">21</span><span>, </span><span style="color:#707070;">28</span><span>, </span><span style="color:#707070;">35</span><span>, </span><span style="color:#707070;">42</span><span>]
+</span><span style="color:#bbbbbb;"># bit positions for the top padding row
+</span><span>pad_top </span><span style="font-weight:bold;color:#202020;">= </span><span>[</span><span style="color:#707070;">6</span><span>, </span><span style="color:#707070;">13</span><span>, </span><span style="color:#707070;">20</span><span>, </span><span style="color:#707070;">27</span><span>, </span><span style="color:#707070;">34</span><span>, </span><span style="color:#707070;">41</span><span>, </span><span style="color:#707070;">48</span><span>]
+</span></code></pre>
+<p>We increment <code>counter</code> each time a move is made. If its value is even, the current player is White, else Black. The <code>heights</code> array stores the bit position for the next free cell in each column. Notice that if a column is full, its value in the <code>heights</code> array will match the value in the <code>pad_top</code> array.</p>
+<p>This compact representation allows for optimizations that makes things faster. Making a move is now as easy as:</p>
+<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span style="font-weight:bold;color:#202020;">def </span><span>make_move(state, icol):
+</span><span>    </span><span style="color:#bbbbbb;"># set the appropriate bit for the current player to 1
+</span><span>    bitboards[counter </span><span style="font-weight:bold;color:#202020;">&amp; </span><span style="color:#707070;">1</span><span>] </span><span style="font-weight:bold;color:#202020;">^= </span><span>(</span><span style="color:#707070;">1 </span><span style="font-weight:bold;color:#202020;">&lt;&lt; </span><span>heights[icol])
+</span><span>
+</span><span>    counter </span><span style="font-weight:bold;color:#202020;">+= </span><span style="color:#707070;">1
+</span><span>    heights[icol] </span><span style="font-weight:bold;color:#202020;">+= </span><span style="color:#707070;">1
+</span></code></pre>
+<p>Checking for wins is also much more efficient. For instance, lets consider the positive diagonal. Notice from the way we've laid out the bits, that the positive diagonal cells differ by a value of <code>8</code>. For example, the bit to the top-right of bit <code>14</code> is bit <code>22</code>. So for each bit, we can look at the bits that are <code>8</code>, <code>16</code> and <code>24</code> bits away, and if they are all set to 1, we have a 4-in-a-row along the positive diagonal.</p>
+<p><img src="https://balkarjun.github.io/blog/minimax-connect-four/assets/Bitboard.png" alt="Illustration showing the process for finding four-in-a-row using bitboards" /></p>
+<p>We can actually check this for every bit simultaneously, as shown above.  Highlighted in orange are the bits that are in common so far. Notice that if there is a 4-in-a-row, there will be atleast one non-zero bit at the end. The implementation is as shown: </p>
+<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span>board </span><span style="font-weight:bold;color:#202020;">= </span><span>bitboards[</span><span style="color:#707070;">1</span><span>] </span><span style="color:#bbbbbb;"># bitboard for Black
+</span><span style="font-weight:bold;color:#202020;">if </span><span>board </span><span style="font-weight:bold;color:#202020;">&amp; </span><span>(board </span><span style="font-weight:bold;color:#202020;">&gt;&gt; </span><span style="color:#707070;">8</span><span>) </span><span style="font-weight:bold;color:#202020;">&amp; </span><span>(board </span><span style="font-weight:bold;color:#202020;">&gt;&gt; </span><span style="color:#707070;">16</span><span>) </span><span style="font-weight:bold;color:#202020;">&amp; </span><span>(board </span><span style="font-weight:bold;color:#202020;">&gt;&gt; </span><span style="color:#707070;">24</span><span>) </span><span style="font-weight:bold;color:#202020;">!= </span><span style="color:#707070;">0</span><span>: 
+</span><span>    </span><span style="font-weight:bold;color:#202020;">return </span><span style="color:#707070;">1 </span><span style="color:#bbbbbb;"># 1 indicates a win for Black
+</span></code></pre>
+<p>We can do the same for the other directions. For example, the horizontal cells differ by a value of <code>7</code>. We can check the offsets <code>7</code>, <code>14</code> and <code>21</code> to find horizontal wins.</p>
+<p>With these optimizations, our AI is almost twice as fast.</p>
+<table><thead><tr><th>Depth</th><th>Mean Time <br> <em>2d-array</em></th><th>Mean Time <br> <em>bitboard</em></th></tr></thead><tbody>
+<tr><td>5</td><td>0.018</td><td>0.010</td></tr>
+<tr><td>6</td><td>0.046</td><td>0.024</td></tr>
+<tr><td>7</td><td>0.236</td><td>0.126</td></tr>
+<tr><td>8</td><td>0.509</td><td>0.268</td></tr>
+</tbody></table>
+<p>Mean Time at Depth 8: <strong>0.27 sec</strong></p>
+<p>Comparing mean times at depth 8, we have ended up almost 100x faster than our original minimax implementation! There are ways to speed up the AI even more, but I decided to stop here. </p>
+<h2 id="web-demo">Web Demo</h2>
+<p>I ported the code over to C++, which ended up being about 250x faster than our fastest Python implementation! I compiled it to WebAssembly and created a user interface using HTML, CSS and JavaScript. </p>
+<p><a style="display: block; padding: 0.5em 4em; background-color: #dff4ff; font-weight: 500; border-radius: 3px; text-align: center; text-decoration: none; cursor: pointer;" target="_blank" href="https://balkarjun.github.io/ConnectFourAI/">Play the Demo</a></p>
+<p>The source code for the C++ implementation can be found <a rel="noopener" target="_blank" href="https://github.com/balkarjun/ConnectFourAI/">here</a>.</p>
+<h2 id="what-next">What Next?</h2>
+<p>If you're interested in more optimization techniques, check out <a rel="noopener" target="_blank" href="http://blog.gamesolver.org/">this resource</a>. It's worth noting that a lot of these optimizations work better with a good heuristic. While our simple heuristic works to some extent, it fails to provide an accurate evaluation for more complex positions. Moving beyond Connect Four, there are board games for which creating a good heuristic is nearly impossible.</p>
+<p>In a follow-up blog post, I'll explore a completely different technique to creating the AI, one that does not require a heuristic at all. DeepMind used this technique as part of their AlphaGo AI to achieve a breakthrough result in 2016.</p>
+
+    </div>
+</section>
+
+
+    <footer>
+        <strong>© 2024 Arjun Balakrishnan</strong>
+        <div>
+            <a target="_blank" href="https://www.github.com/balkarjun">GitHub</a>
+            <span style="padding: 0 0.2em; color: #aaaaaa">•</span>
+            <a target="_blank" href="https://www.linkedin.com/in/balkarjun">LinkedIn</a>
+            <span style="padding: 0 0.2em; color: #aaaaaa">•</span>
+            balkarjun<span style="color: #888888">[at]</span>gmail<span style="color: #888888">[dot]</span>com
+        </div>
+    </footer>
+</body>
+</html>
