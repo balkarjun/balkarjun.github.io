@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+<!-- Blog page -->
+
+{% block content %}
+<header>
+    <span>Arjun Balakrishnan</span>
+    <nav>
+        <a href="{{ get_url(path='/') }}">Home</a>
+        <a href="{{ get_url(path='@/blog/_index.md') }}" class="nav-active">Blog</a>
+        <a href="{{ get_url(path='@/projects/_index.md') }}">Projects</a>
+    </nav>
+</header>
+
+<section class="blog-page">
+    <h1>
+        {{ page.title | safe }}
+    </h1>
+    <em>
+        Published on {{ page.date | date(format="%d %B %Y") }}
+    </em>
+
+    <div>
+        {{ page.content | safe }}
+    </div>
+</section>
+{% endblock content %}
