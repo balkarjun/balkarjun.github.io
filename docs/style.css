@@ -1,3 +1,68 @@
+/* ibm-plex-mono-regular - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'IBM Plex Mono';
+    font-style: normal;
+    font-weight: 400;
+    src: url('./fonts/ibm-plex-mono-v19-latin-regular.woff2') format('woff2');
+}
+/* ibm-plex-mono-500 - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'IBM Plex Mono';
+    font-style: normal;
+    font-weight: 500;
+    src: url('./fonts/ibm-plex-mono-v19-latin-500.woff2') format('woff2');
+}
+/* ibm-plex-sans-regular - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: url('./fonts/ibm-plex-sans-v19-latin-regular.woff2') format('woff2');
+}
+/* ibm-plex-sans-italic - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'IBM Plex Sans';
+    font-style: italic;
+    font-weight: 400;
+    src: url('./fonts/ibm-plex-sans-v19-latin-italic.woff2') format('woff2');
+}
+/* ibm-plex-sans-500 - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: 500;
+    src: url('./fonts/ibm-plex-sans-v19-latin-500.woff2') format('woff2');
+}
+/* ibm-plex-sans-500italic - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'IBM Plex Sans';
+    font-style: italic;
+    font-weight: 500;
+    src: url('./fonts/ibm-plex-sans-v19-latin-500italic.woff2') format('woff2');
+}
+  /* ibm-plex-sans-600 - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: 600;
+    src: url('./fonts/ibm-plex-sans-v19-latin-600.woff2') format('woff2');
+}
+/* ibm-plex-sans-700 - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: url('./fonts/ibm-plex-sans-v19-latin-700.woff2') format('woff2');
+}
+
 :root {
     --blue: #0273b2;
     --blue-subtle: #dff4ff;
@@ -41,6 +106,7 @@ nav a {
 
 nav a:hover, .nav-active {
     text-decoration: underline;
+    text-decoration-color: #222222;
 }
 
 footer {
@@ -60,6 +126,12 @@ footer a {
 
 footer a:hover {
     text-decoration-color: #666666;
+}
+
+footer i {
+    font-style: normal;
+    color: #888888;
+    padding: 0 0.1em;
 }
 
 h1, h2, h3, h4 {
@@ -151,59 +223,55 @@ a:hover {
 }
 
 /* Blog Page */
-.blog-page ul {
+#blog-page ul {
     list-style-position: inside;
     margin: 0.8em 0;
     margin-left: 1em;
 }
 
-.blog-page img {
+#blog-page img {
     display: block;
     margin: 0 auto;
 }
 
 /* List of Blogs  */
-.blog ul {
+#blog ul {
     list-style-type: none;
 }
 
-.blog ul a {
+#blog ul a {
     color: #222222;
     text-decoration: underline;
     text-decoration-color: #cccccc;
 }
 
-.blog ul span {
+#blog ul span {
     margin-left: 0.1em;
     color: #999999;
 }
 
 /* List of Projects */
-.projects ul {
-    list-style-type: none;
-}
-
-.projects li div h3 {
+#projects h3 {
     display: inline;
 }
 
-.projects li div + p {
+#projects div + p {
     margin-top: 0.4em;
 }
 
-.projects li p strong {
+#projects p strong {
     font-weight: 600;
 }
 
-.projects li {
+#projects .project {
     margin: 2em 0;
 }
 
-.projects .links {
+#projects .links {
     margin-top: 0.2em;
 }
 
-.projects .links a, .button-link {
+#projects .links a {
     font-size: 0.9em;
     font-weight: 500;
     text-decoration: none;
@@ -212,7 +280,7 @@ a:hover {
     border-radius: 0.2em;
 }
 
-.projects .project-date {
+#projects .project-date {
     color: #666666;
     padding-left: 0.1em;
     font-size: 0.9em;
