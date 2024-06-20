@@ -106,6 +106,7 @@ nav a {
 
 nav a:hover, .nav-active {
     text-decoration: underline;
+    text-decoration-color: #222222;
 }
 
 footer {
