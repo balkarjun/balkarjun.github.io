@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+<meta name="description" content="How does a board game AI think? In this blog post I discuss the popular Minimax algorithm in the context of creating an AI to play Connect Four, along with optimizations to make it go fast.">
+
     <title>Arjun Balakrishnan</title>
     <link rel="stylesheet" href="/style.css">
 </head>
@@ -95,8 +98,7 @@
 <li><a rel="noopener" target="_blank" href="https://tleemann.de/four.html">Tobias Leemann</a> uses a pre-trained neural network as an evaluator.</li>
 <li><a rel="noopener" target="_blank" href="https://connect4.gamesolver.org/">Pascal Pons</a> does not use a heuristic, since the AI computes the exact outcome of a position, made possible through tons of clever optimizations.</li>
 </ul>
-<p>I ended up using a different approach that I found <a rel="noopener" target="_blank" href="https://file.scirp.org/Html/1-9601415_90972.htm">here</a>. It might not be as effective as other heuristics, but it's so simple that it's crazy it even works as well as it does. </p>
-<p>Here's how it works. We assign a value to each cell in the board, based on the number of 4-in-a-rows possible from that cell. For example, from the bottom-left cell, you can get 4-in-a-row in three ways, so its value is 3.</p>
+<p>I ended up using a <a rel="noopener" target="_blank" href="https://file.scirp.org/Html/1-9601415_90972.htm">different approach</a>. It might not be as effective as other heuristics, but it's so simple that it's crazy it even works as well as it does. We assign a value to each cell based on the number of 4-in-a-rows possible from that cell. For example, there are three ways to get 4-in-a-row from the bottom-left cell, so its value is 3.</p>
 <pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span>scoremap </span><span style="font-weight:bold;color:#202020;">= </span><span>[
 </span><span>    [</span><span style="color:#707070;">3</span><span>, </span><span style="color:#707070;">4</span><span>,  </span><span style="color:#707070;">5</span><span>,  </span><span style="color:#707070;">7</span><span>,  </span><span style="color:#707070;">5</span><span>, </span><span style="color:#707070;">4</span><span>, </span><span style="color:#707070;">3</span><span>],
 </span><span>    [</span><span style="color:#707070;">4</span><span>, </span><span style="color:#707070;">6</span><span>,  </span><span style="color:#707070;">8</span><span>,  </span><span style="color:#707070;">9</span><span>,  </span><span style="color:#707070;">8</span><span>, </span><span style="color:#707070;">6</span><span>, </span><span style="color:#707070;">4</span><span>],
@@ -239,9 +241,8 @@ Mean Time at Depth 8: <strong>0.51 sec</strong></p>
 <p>Mean Time at Depth 8: <strong>0.27 sec</strong></p>
 <p>Comparing mean times at depth 8, we have ended up almost 100x faster than our original minimax implementation! There are ways to speed up the AI even more, but I decided to stop here. </p>
 <h2 id="web-demo">Web Demo</h2>
-<p>I ported the code over to C++, which ended up being about 250x faster than our fastest Python implementation! I compiled it to WebAssembly and created a user interface using HTML, CSS and JavaScript. </p>
-<p><a style="display: block; padding: 0.5em 4em; background-color: #dff4ff; font-weight: 500; border-radius: 3px; text-align: center; text-decoration: none; cursor: pointer;" target="_blank" href="https://balkarjun.github.io/ConnectFourAI/">Play the Demo</a></p>
-<p>The source code for the C++ implementation can be found <a rel="noopener" target="_blank" href="https://github.com/balkarjun/ConnectFourAI/">here</a>.</p>
+<p>I ported the code over to C++, which ended up being around 250x faster than our fastest Python implementation! I compiled it to WebAssembly and created a web interface. View the <a rel="noopener" target="_blank" href="https://github.com/balkarjun/ConnectFourAI/">source code</a> or play directly on your browser.</p>
+<p><a class="primary-button" target="_blank" href="https://balkarjun.github.io/ConnectFourAI/">Play the Demo</a></p>
 <h2 id="what-next">What Next?</h2>
 <p>If you're interested in more optimization techniques, check out <a rel="noopener" target="_blank" href="http://blog.gamesolver.org/">this resource</a>. It's worth noting that a lot of these optimizations work better with a good heuristic. While our simple heuristic works to some extent, it fails to provide an accurate evaluation for more complex positions. Moving beyond Connect Four, there are board games for which creating a good heuristic is nearly impossible.</p>
 <p>In a follow-up blog post, I'll explore a completely different technique to creating the AI, one that does not require a heuristic at all. DeepMind used this technique as part of their AlphaGo AI to achieve a breakthrough result in 2016.</p>

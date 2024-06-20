@@ -234,6 +234,17 @@ a:hover {
     margin: 0 auto;
 }
 
+#blog-page .primary-button {
+    display: block; 
+    padding: 0.5em 4em; 
+    background-color: var(--blue-subtle);
+    font-weight: 500;
+    border-radius: 3px; 
+    text-align: center; 
+    text-decoration: none; 
+    cursor: pointer; 
+}
+
 /* List of Blogs  */
 #blog ul {
     list-style-type: none;
