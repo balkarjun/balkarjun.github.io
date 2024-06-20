@@ -11,26 +11,24 @@
     </nav>
 </header>
 
-<section class="projects">
-    <ul>
-        {% for project in section.pages %}
-        <li>
-            <div>
-                <h3>{{ project.title }}</h3>
-                <span class="project-date">{{ project.date | date(format="%Y") }}</span>
-            </div>
+<section id="projects">
+{% for project in section.pages %}
+    <div class="project">
+        <div>
+            <h3>{{ project.title }}</h3>
+            <span class="project-date">{{ project.date | date(format="%Y") }}</span>
+        </div>
 
-            {% if project.extra.links %}
-            <div class="links">
-                {% for link in project.extra.links %}
-                <a href="{{ link.url }}" target="_blank">{{ link.name }}</a>
-                {% endfor %}
-            </div>
-            {% endif %}
+        {% if project.extra.links %}
+        <div class="links">
+            {% for link in project.extra.links %}
+            <a href="{{ link.url }}" target="_blank">{{ link.name }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
 
-            {{ project.content | safe }}
-        </li>
-        {% endfor %}
-    </ul>
+        {{ project.content | safe }}
+    </div>
+{% endfor %}
 </section>
 {% endblock content %}

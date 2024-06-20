@@ -128,6 +128,12 @@ footer a:hover {
     text-decoration-color: #666666;
 }
 
+footer i {
+    font-style: normal;
+    color: #888888;
+    padding: 0 0.1em;
+}
+
 h1, h2, h3, h4 {
     line-height: 1.2;
 }
@@ -217,59 +223,55 @@ a:hover {
 }
 
 /* Blog Page */
-.blog-page ul {
+#blog-page ul {
     list-style-position: inside;
     margin: 0.8em 0;
     margin-left: 1em;
 }
 
-.blog-page img {
+#blog-page img {
     display: block;
     margin: 0 auto;
 }
 
 /* List of Blogs  */
-.blog ul {
+#blog ul {
     list-style-type: none;
 }
 
-.blog ul a {
+#blog ul a {
     color: #222222;
     text-decoration: underline;
     text-decoration-color: #cccccc;
 }
 
-.blog ul span {
+#blog ul span {
     margin-left: 0.1em;
     color: #999999;
 }
 
 /* List of Projects */
-.projects ul {
-    list-style-type: none;
-}
-
-.projects li div h3 {
+#projects h3 {
     display: inline;
 }
 
-.projects li div + p {
+#projects div + p {
     margin-top: 0.4em;
 }
 
-.projects li p strong {
+#projects p strong {
     font-weight: 600;
 }
 
-.projects li {
+#projects .project {
     margin: 2em 0;
 }
 
-.projects .links {
+#projects .links {
     margin-top: 0.2em;
 }
 
-.projects .links a, .button-link {
+#projects .links a {
     font-size: 0.9em;
     font-weight: 500;
     text-decoration: none;
@@ -278,7 +280,7 @@ a:hover {
     border-radius: 0.2em;
 }
 
-.projects .project-date {
+#projects .project-date {
     color: #666666;
     padding-left: 0.1em;
     font-size: 0.9em;

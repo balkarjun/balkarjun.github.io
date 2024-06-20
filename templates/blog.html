@@ -11,7 +11,7 @@
     </nav>
 </header>
 
-<section class="blog">
+<section id="blog">
     {% for year, pages in section.pages | group_by(attribute="year") %}
     <h3>{{ year }}</h3>
     <ul>
