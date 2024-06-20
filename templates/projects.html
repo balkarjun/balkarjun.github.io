@@ -13,7 +13,7 @@
 
 <section id="projects">
 {% for project in section.pages %}
-    <div class="project">
+    <div class="project" id="{{ project.title | slugify }}">
         <div>
             <h3>{{ project.title }}</h3>
             <span class="project-date">{{ project.date | date(format="%Y") }}</span>
