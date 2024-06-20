@@ -95,9 +95,7 @@ Creating an accurate (and fast) heuristic is hard. I spent an ungodly amount of 
 - [Tobias Leemann](https://tleemann.de/four.html) uses a pre-trained neural network as an evaluator.
 - [Pascal Pons](https://connect4.gamesolver.org/) does not use a heuristic, since the AI computes the exact outcome of a position, made possible through tons of clever optimizations.
 
-I ended up using a different approach that I found [here](https://file.scirp.org/Html/1-9601415_90972.htm). It might not be as effective as other heuristics, but it's so simple that it's crazy it even works as well as it does. 
-
-Here's how it works. We assign a value to each cell in the board, based on the number of 4-in-a-rows possible from that cell. For example, from the bottom-left cell, you can get 4-in-a-row in three ways, so its value is 3.
+I ended up using a [different approach](https://file.scirp.org/Html/1-9601415_90972.htm). It might not be as effective as other heuristics, but it's so simple that it's crazy it even works as well as it does. We assign a value to each cell based on the number of 4-in-a-rows possible from that cell. For example, there are three ways to get 4-in-a-row from the bottom-left cell, so its value is 3.
 ```py
 scoremap = [
     [3, 4,  5,  7,  5, 4, 3],
@@ -281,11 +279,9 @@ Mean Time at Depth 8: **0.27 sec**
 Comparing mean times at depth 8, we have ended up almost 100x faster than our original minimax implementation! There are ways to speed up the AI even more, but I decided to stop here. 
 
 ## Web Demo
-I ported the code over to C++, which ended up being about 250x faster than our fastest Python implementation! I compiled it to WebAssembly and created a user interface using HTML, CSS and JavaScript. 
+I ported the code over to C++, which ended up being around 250x faster than our fastest Python implementation! I compiled it to WebAssembly and created a web interface. View the [source code](https://github.com/balkarjun/ConnectFourAI/) or play directly on your browser.
 
-<a style="display: block; padding: 0.5em 4em; background-color: #dff4ff; font-weight: 500; border-radius: 3px; text-align: center; text-decoration: none; cursor: pointer;" target="_blank" href="https://balkarjun.github.io/ConnectFourAI/">Play the Demo</a>
-
-The source code for the C++ implementation can be found [here](https://github.com/balkarjun/ConnectFourAI/).
+<a class="primary-button" target="_blank" href="https://balkarjun.github.io/ConnectFourAI/">Play the Demo</a>
 
 ## What Next?
 If you're interested in more optimization techniques, check out [this resource](http://blog.gamesolver.org/). It's worth noting that a lot of these optimizations work better with a good heuristic. While our simple heuristic works to some extent, it fails to provide an accurate evaluation for more complex positions. Moving beyond Connect Four, there are board games for which creating a good heuristic is nearly impossible.
