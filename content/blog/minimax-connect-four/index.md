@@ -1,5 +1,6 @@
 +++
 title = "Exploring Board Game AI Algorithms: Minimax"
+description = "How does a board game AI think? In this blog post I discuss the popular Minimax algorithm in the context of creating an AI to play Connect Four, along with optimizations to make it go fast."
 date = 2024-06-15
 +++
 

@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 <!-- Blog page -->
 
+{% block metadata %}
+<meta name="description" content="{{ page.description }}">
+{% endblock metadata %}
+
 {% block content %}
 <header>
     <span>Arjun Balakrishnan</span>
