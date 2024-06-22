@@ -6,8 +6,17 @@
     {% block metadata %}{% endblock %}
     <title>Arjun Balakrishnan</title>
     <link rel="stylesheet" href="/style.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VHRD5T5LV7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-VHRD5T5LV7');
+    </script>
 </head>
-<body>    
+<body>
     {% block content %}
     {% endblock %}
 
