@@ -66,7 +66,7 @@
 :root {
     --blue: #0273b2;
     --blue-subtle: #dff4ff;
-    --orange: #da6512;
+    --orange: #b7510b;
 }
 
 * {
@@ -130,7 +130,7 @@ footer a:hover {
 
 footer i {
     font-style: normal;
-    color: #888888;
+    color: #707070;
     padding: 0 0.1em;
 }
 
