@@ -139,8 +139,15 @@ h1, h2, h3, h4 {
 }
 
 h2, h3 {
-    margin-top: 1em;
     font-weight: 600;
+}
+
+h2 {
+    margin-top: 2em;
+}
+
+h3 {
+    margin-top: 1.5em;
 }
 
 h2 + p, h3 + p {
@@ -180,7 +187,7 @@ pre {
     padding: 1em;
     margin: 1em 0;
     overflow-x: auto;
-    border: 1px solid #dddddd;
+    border: 1px solid #eee;
 }
 
 code {
@@ -243,6 +250,10 @@ a:hover {
     text-align: center; 
     text-decoration: none; 
     cursor: pointer; 
+}
+
+#blog-page h3 {
+    color: #444444;
 }
 
 /* List of Blogs  */
