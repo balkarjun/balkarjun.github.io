@@ -52,11 +52,11 @@
 <pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span>nrows </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">6
 </span><span>ncols </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">7
 </span><span>
-</span><span style="color:#bbbbbb;"># value representing each player
+</span><span style="color:#707070;"># value representing each player
 </span><span>white </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">1
 </span><span>black </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">2
 </span><span>
-</span><span style="color:#bbbbbb;"># there are 6*7 = 42 cells
+</span><span style="color:#707070;"># there are 6*7 = 42 cells
 </span><span>board </span><span style="font-weight:bold;color:#202020;">= </span><span>[
 </span><span>    [</span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>],
 </span><span>    [</span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>],
@@ -133,7 +133,7 @@
 </span><span>    sign </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">1 </span><span style="font-weight:bold;color:#202020;">if </span><span>(player </span><span style="font-weight:bold;color:#202020;">== </span><span>white) </span><span style="font-weight:bold;color:#202020;">else -</span><span style="color:#707070;">1
 </span><span>    
 </span><span>    </span><span style="font-weight:bold;color:#202020;">for </span><span>icol </span><span style="font-weight:bold;color:#202020;">in </span><span>range(ncols):
-</span><span>        </span><span style="color:#bbbbbb;"># skip filled columns
+</span><span>        </span><span style="color:#707070;"># skip filled columns
 </span><span>        </span><span style="font-weight:bold;color:#202020;">if </span><span>board[</span><span style="color:#707070;">0</span><span>][icol] </span><span style="font-weight:bold;color:#202020;">!= </span><span style="color:#707070;">0</span><span>:
 </span><span>            </span><span style="font-weight:bold;color:#202020;">continue
 </span><span>        
@@ -220,13 +220,13 @@ Mean Time at Depth 8: <strong>0.51 sec</strong></p>
 </span><span>]
 </span><span>counter </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">0
 </span><span>heights </span><span style="font-weight:bold;color:#202020;">= </span><span>[</span><span style="color:#707070;">0</span><span>,  </span><span style="color:#707070;">7</span><span>, </span><span style="color:#707070;">14</span><span>, </span><span style="color:#707070;">21</span><span>, </span><span style="color:#707070;">28</span><span>, </span><span style="color:#707070;">35</span><span>, </span><span style="color:#707070;">42</span><span>]
-</span><span style="color:#bbbbbb;"># bit positions for the top padding row
+</span><span style="color:#707070;"># bit positions for the top padding row
 </span><span>pad_top </span><span style="font-weight:bold;color:#202020;">= </span><span>[</span><span style="color:#707070;">6</span><span>, </span><span style="color:#707070;">13</span><span>, </span><span style="color:#707070;">20</span><span>, </span><span style="color:#707070;">27</span><span>, </span><span style="color:#707070;">34</span><span>, </span><span style="color:#707070;">41</span><span>, </span><span style="color:#707070;">48</span><span>]
 </span></code></pre>
 <p>We increment <code>counter</code> each time a move is made. If its value is even, the current player is White, else Black. The <code>heights</code> array stores the bit position for the next free cell in each column. Notice that if a column is full, its value in the <code>heights</code> array will match the value in the <code>pad_top</code> array.</p>
 <p>This compact representation allows for optimizations that makes things faster. Making a move is now as easy as:</p>
 <pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span style="font-weight:bold;color:#202020;">def </span><span>make_move(state, icol):
-</span><span>    </span><span style="color:#bbbbbb;"># set the appropriate bit for the current player to 1
+</span><span>    </span><span style="color:#707070;"># set the appropriate bit for the current player to 1
 </span><span>    bitboards[counter </span><span style="font-weight:bold;color:#202020;">&amp; </span><span style="color:#707070;">1</span><span>] </span><span style="font-weight:bold;color:#202020;">^= </span><span>(</span><span style="color:#707070;">1 </span><span style="font-weight:bold;color:#202020;">&lt;&lt; </span><span>heights[icol])
 </span><span>
 </span><span>    counter </span><span style="font-weight:bold;color:#202020;">+= </span><span style="color:#707070;">1
@@ -235,9 +235,9 @@ Mean Time at Depth 8: <strong>0.51 sec</strong></p>
 <p>Checking for wins is also much more efficient. For instance, lets consider the positive diagonal. Notice from the way we've laid out the bits, that the positive diagonal cells differ by a value of <code>8</code>. For example, the bit to the top-right of bit <code>14</code> is bit <code>22</code>. So for each bit, we can look at the bits that are <code>8</code>, <code>16</code> and <code>24</code> bits away, and if they are all set to 1, we have a 4-in-a-row along the positive diagonal.</p>
 <p><img src="https://balkarjun.github.io/blog/minimax-connect-four/assets/Bitboard.png" alt="Illustration showing the process for finding four-in-a-row using bitboards" /></p>
 <p>We can actually check this for every bit simultaneously, as shown above.  Highlighted in orange are the bits that are in common so far. Notice that if there is a 4-in-a-row, there will be atleast one non-zero bit at the end. The implementation is as shown: </p>
-<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span>board </span><span style="font-weight:bold;color:#202020;">= </span><span>bitboards[</span><span style="color:#707070;">1</span><span>] </span><span style="color:#bbbbbb;"># bitboard for Black
+<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span>board </span><span style="font-weight:bold;color:#202020;">= </span><span>bitboards[</span><span style="color:#707070;">1</span><span>] </span><span style="color:#707070;"># bitboard for Black
 </span><span style="font-weight:bold;color:#202020;">if </span><span>board </span><span style="font-weight:bold;color:#202020;">&amp; </span><span>(board </span><span style="font-weight:bold;color:#202020;">&gt;&gt; </span><span style="color:#707070;">8</span><span>) </span><span style="font-weight:bold;color:#202020;">&amp; </span><span>(board </span><span style="font-weight:bold;color:#202020;">&gt;&gt; </span><span style="color:#707070;">16</span><span>) </span><span style="font-weight:bold;color:#202020;">&amp; </span><span>(board </span><span style="font-weight:bold;color:#202020;">&gt;&gt; </span><span style="color:#707070;">24</span><span>) </span><span style="font-weight:bold;color:#202020;">!= </span><span style="color:#707070;">0</span><span>: 
-</span><span>    </span><span style="font-weight:bold;color:#202020;">return </span><span style="color:#707070;">1 </span><span style="color:#bbbbbb;"># 1 indicates a win for Black
+</span><span>    </span><span style="font-weight:bold;color:#202020;">return </span><span style="color:#707070;">1 # 1 indicates a win for Black
 </span></code></pre>
 <p>We can do the same for the other directions. For example, the horizontal cells differ by a value of <code>7</code>. We can check the offsets <code>7</code>, <code>14</code> and <code>21</code> to find horizontal wins.</p>
 <p>With these optimizations, our AI is almost twice as fast.</p>
@@ -264,9 +264,9 @@ Mean Time at Depth 8: <strong>0.51 sec</strong></p>
         <strong>© 2024 Arjun Balakrishnan</strong>
         <div>
             <a target="_blank" href="https://www.github.com/balkarjun">GitHub</a>
-            <i>•</i>
+            <i>·</i>
             <a target="_blank" href="https://www.linkedin.com/in/balkarjun">LinkedIn</a>
-            <i>•</i>
+            <i>·</i>
             balkarjun<i>[at]</i>gmail<i>[dot]</i>com
         </div>
     </footer>
