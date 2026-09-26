@@ -10,11 +10,5 @@ build_search_index = false
 [markdown]
 external_links_target_blank = true
 
-# folder containing the custom theme
-extra_syntaxes_and_themes = ["themes"]
-
-highlight_code = true
-highlight_theme = 'custom'
-
-[extra]
-# Put all your custom variables here
+[markdown.highlighting]
+theme = "github-light"
