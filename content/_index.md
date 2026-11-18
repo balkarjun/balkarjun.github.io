@@ -20,4 +20,4 @@ Want to collaborate? Feel free to reach out using the contact info in the footer
 ### Colophon
 I write in Markdown and use [Zola SSG](https://www.getzola.org/) to convert it to HTML and CSS. I try to avoid JavaScript when I can; I use just a *tiny* bit of it to measure page views.
 
-The fonts are IBM Plex Sans/Mono. All illustrations are mine, drawn using Procreate.
+The fonts are EB Garamond, Hanken Grotesk and IBM Plex Mono. All illustrations are mine, drawn using Procreate.
