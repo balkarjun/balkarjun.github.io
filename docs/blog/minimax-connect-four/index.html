@@ -38,8 +38,8 @@
     </em>
 
     <div>
-        <p>Computers are <em>very</em> good at playing board games. Traditionally for games like Chess, algorithms like Minimax and Alpha-Beta Pruning were used to search for moves. More recently, techniques like Monte-Carlo Tree Search and Reinforcement Learning have made these AIs more formidable. </p>
-<p>To learn more about these algorithms, I decided to implement them from scratch. These algorithms can be applied to most board games. I chose Connect Four because it is simpler than a game like Chess or Go, but not as trivial as Tic-Tac-Toe. </p>
+        <p>Computers are <em>very</em> good at playing board games. Traditionally for games like Chess, algorithms like Minimax and Alpha-Beta Pruning were used to search for moves. More recently, techniques like Monte-Carlo Tree Search and Reinforcement Learning have made these AIs more formidable.</p>
+<p>To learn more about these algorithms, I decided to implement them from scratch. These algorithms can be applied to most board games. I chose Connect Four because it is simpler than a game like Chess or Go, but not as trivial as Tic-Tac-Toe.</p>
 <p>For those unfamiliar, Connect Four is played on a 6x7 board where two players, White and Black (Red and Yellow are used in the original game), take turns dropping their coins into one of the columns. The first player to line up 4 of their coins wins.</p>
 <p>
     <img src="assets/Example_Game.png" height="260" alt="Illustration of a Connect Four game">
@@ -49,42 +49,37 @@
 <p>My approach when writing code is to write the simple solution first, <em>then</em> spend time making it better. This stops me from over-generalizing the solution early on, and provides the necessary context for optimizations later. For Connect Four, we only need three things to make a playable game:</p>
 <h3 id="representing-the-board">Representing the Board</h3>
 <p>We use a 2D array to represent the board. We set a cell to a player's value to indicate that the player's coin is in that cell. A value of <code>0</code> indicates an empty cell.</p>
-<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span>nrows </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">6
-</span><span>ncols </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">7
-</span><span>
-</span><span style="color:#707070;"># value representing each player
-</span><span>white </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">1
-</span><span>black </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">2
-</span><span>
-</span><span style="color:#707070;"># there are 6*7 = 42 cells
-</span><span>board </span><span style="font-weight:bold;color:#202020;">= </span><span>[
-</span><span>    [</span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>],
-</span><span>    [</span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>],
-</span><span>    [</span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>],
-</span><span>    [</span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>],
-</span><span>    [</span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>],
-</span><span>    [</span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>, </span><span style="color:#707070;">0</span><span>],
-</span><span>]
-</span></code></pre>
-<h3 id="making-a-move">Making a Move</h3>
+<pre class="giallo" style="color: #24292E; background-color: #FFFFFF;" ><code data-lang="python"><span class="giallo-l"><span>nrows</span><span style="color: #D73A49;"> =</span><span style="color: #005CC5;"> 6</span></span>
+<span class="giallo-l"><span>ncols</span><span style="color: #D73A49;"> =</span><span style="color: #005CC5;"> 7</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># value representing each player</span></span>
+<span class="giallo-l"><span>white</span><span style="color: #D73A49;"> =</span><span style="color: #005CC5;"> 1</span></span>
+<span class="giallo-l"><span>black</span><span style="color: #D73A49;"> =</span><span style="color: #005CC5;"> 2</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># there are 6*7 = 42 cells</span></span>
+<span class="giallo-l"><span>board</span><span style="color: #D73A49;"> =</span><span> [</span></span>
+<span class="giallo-l"><span>    [</span><span style="color: #005CC5;">0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>],</span></span>
+<span class="giallo-l"><span>    [</span><span style="color: #005CC5;">0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>],</span></span>
+<span class="giallo-l"><span>    [</span><span style="color: #005CC5;">0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>],</span></span>
+<span class="giallo-l"><span>    [</span><span style="color: #005CC5;">0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>],</span></span>
+<span class="giallo-l"><span>    [</span><span style="color: #005CC5;">0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>],</span></span>
+<span class="giallo-l"><span>    [</span><span style="color: #005CC5;">0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>,</span><span style="color: #005CC5;"> 0</span><span>],</span></span>
+<span class="giallo-l"><span>]</span></span></code></pre><h3 id="making-a-move">Making a Move</h3>
 <p>We place the player's coin at the bottom-most empty cell in the column.</p>
-<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span style="font-weight:bold;color:#202020;">def </span><span>make_move(board, player, icol):
-</span><span>    </span><span style="font-weight:bold;color:#202020;">for </span><span>irow </span><span style="font-weight:bold;color:#202020;">in </span><span>range(nrows </span><span style="font-weight:bold;color:#202020;">- </span><span style="color:#707070;">1</span><span>, </span><span style="font-weight:bold;color:#202020;">-</span><span style="color:#707070;">1</span><span>, </span><span style="font-weight:bold;color:#202020;">-</span><span style="color:#707070;">1</span><span>):
-</span><span>        </span><span style="font-weight:bold;color:#202020;">if </span><span>board[irow][icol] </span><span style="font-weight:bold;color:#202020;">== </span><span style="color:#707070;">0</span><span>:
-</span><span>            board[irow][icol] </span><span style="font-weight:bold;color:#202020;">= </span><span>player
-</span><span>            </span><span style="font-weight:bold;color:#202020;">return </span><span>True
-</span><span>    
-</span><span>    </span><span style="font-weight:bold;color:#202020;">return </span><span>False
-</span></code></pre>
-<h3 id="checking-wins">Checking Wins</h3>
+<pre class="giallo" style="color: #24292E; background-color: #FFFFFF;" ><code data-lang="python"><span class="giallo-l"><span style="color: #D73A49;">def</span><span style="color: #6F42C1;"> make_move</span><span>(board, player, icol):</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    for</span><span> irow</span><span style="color: #D73A49;"> in</span><span style="color: #005CC5;"> range</span><span>(nrows</span><span style="color: #D73A49;"> -</span><span style="color: #005CC5;"> 1</span><span>,</span><span style="color: #D73A49;"> -</span><span style="color: #005CC5;">1</span><span>,</span><span style="color: #D73A49;"> -</span><span style="color: #005CC5;">1</span><span>):</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">        if</span><span> board[irow][icol]</span><span style="color: #D73A49;"> ==</span><span style="color: #005CC5;"> 0</span><span>:</span></span>
+<span class="giallo-l"><span>            board[irow][icol]</span><span style="color: #D73A49;"> =</span><span> player</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">            return</span><span style="color: #005CC5;"> True</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    return</span><span style="color: #005CC5;"> False</span></span></code></pre><h3 id="checking-wins">Checking Wins</h3>
 <p>There are 69 ways to get a 4-in-a-row — 24 ways horizontally, 21 vertically and 24 along the two diagonals. Here's the code to check the positive diagonal:</p>
-<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span style="font-weight:bold;color:#202020;">for </span><span>irow </span><span style="font-weight:bold;color:#202020;">in </span><span>range(nrows </span><span style="font-weight:bold;color:#202020;">- </span><span style="color:#707070;">3</span><span>):
-</span><span>    </span><span style="font-weight:bold;color:#202020;">for </span><span>icol </span><span style="font-weight:bold;color:#202020;">in </span><span>range(</span><span style="color:#707070;">3</span><span>, ncols):
-</span><span>        </span><span style="font-weight:bold;color:#202020;">if </span><span>(board[irow][icol] </span><span style="font-weight:bold;color:#202020;">!= </span><span style="color:#707070;">0</span><span>) </span><span style="font-weight:bold;color:#202020;">and </span><span>(board[irow][icol] </span><span style="font-weight:bold;color:#202020;">== </span><span>board[irow </span><span style="font-weight:bold;color:#202020;">+ </span><span style="color:#707070;">1</span><span>][icol </span><span style="font-weight:bold;color:#202020;">- </span><span style="color:#707070;">1</span><span>] </span><span style="font-weight:bold;color:#202020;">== </span><span>board[irow </span><span style="font-weight:bold;color:#202020;">+ </span><span style="color:#707070;">2</span><span>][icol </span><span style="font-weight:bold;color:#202020;">- </span><span style="color:#707070;">2</span><span>] </span><span style="font-weight:bold;color:#202020;">== </span><span>board[irow </span><span style="font-weight:bold;color:#202020;">+ </span><span style="color:#707070;">3</span><span>][icol </span><span style="font-weight:bold;color:#202020;">- </span><span style="color:#707070;">3</span><span>]):
-</span><span>            </span><span style="font-weight:bold;color:#202020;">return </span><span>board[irow][icol]
-</span></code></pre>
+<pre class="giallo" style="color: #24292E; background-color: #FFFFFF;" ><code data-lang="python"><span class="giallo-l"><span style="color: #D73A49;">for</span><span> irow</span><span style="color: #D73A49;"> in</span><span style="color: #005CC5;"> range</span><span>(nrows</span><span style="color: #D73A49;"> -</span><span style="color: #005CC5;"> 3</span><span>):</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    for</span><span> icol</span><span style="color: #D73A49;"> in</span><span style="color: #005CC5;"> range</span><span>(</span><span style="color: #005CC5;">3</span><span>, ncols):</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">        if</span><span> (board[irow][icol]</span><span style="color: #D73A49;"> !=</span><span style="color: #005CC5;"> 0</span><span>)</span><span style="color: #D73A49;"> and</span><span> (board[irow][icol]</span><span style="color: #D73A49;"> ==</span><span> board[irow</span><span style="color: #D73A49;"> +</span><span style="color: #005CC5;"> 1</span><span>][icol</span><span style="color: #D73A49;"> -</span><span style="color: #005CC5;"> 1</span><span>]</span><span style="color: #D73A49;"> ==</span><span> board[irow</span><span style="color: #D73A49;"> +</span><span style="color: #005CC5;"> 2</span><span>][icol</span><span style="color: #D73A49;"> -</span><span style="color: #005CC5;"> 2</span><span>]</span><span style="color: #D73A49;"> ==</span><span> board[irow</span><span style="color: #D73A49;"> +</span><span style="color: #005CC5;"> 3</span><span>][icol</span><span style="color: #D73A49;"> -</span><span style="color: #005CC5;"> 3</span><span>]):</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">            return</span><span> board[irow][icol]</span></span></code></pre>
 <p>Checking the other directions is just as easy.</p>
-<p>With that, and a bit of code to handle player turns, we're done! We could stop here and we'd have a basic two-player game. </p>
+<p>With that, and a bit of code to handle player turns, we're done! We could stop here and we'd have a basic two-player game.</p>
 <h2 id="creating-our-ai-opponent">Creating our AI Opponent</h2>
 <p>Suppose you are now playing against an AI. You start by placing a coin in the middle column. The AI could respond by placing its coin in any one of the seven columns. How does it figure out which of those columns is the best one?</p>
 <h3 id="minimax-and-negamax">Minimax and Negamax</h3>
@@ -93,64 +88,62 @@
 <em>Minimax search tree</em></p>
 <p>A White node picks the path that leads to the highest score, while a Black node picks the path that leads to the lowest score. This way, a player can pick the best move out of all possibilities. This idea forms the basis for the <strong>minimax</strong> algorithm.</p>
 <p>But how do we find the scores? Ideally, instead of just looking 2 moves deep, the AI should look through <em>all</em> possible moves until the end of the game. Depending on who wins in a position, we could assign a score (+100 for a win by White, 0 for a tie, -100 for a win by Black). But this is impractical.</p>
-<p>Since there are 7 possible responses to any move (assuming none of the columns are filled), if the AI looks 1 move deep, that's 7 positions to consider. At 2 moves deep, that's 7<sup>2</sup> = 49 positions. At 10 moves deep, that number grows to about a quarter of a Billion. A Connect Four game can have upto 42 moves, and it turns out that there are about 4.5 Trillion unique <a rel="noopener" target="_blank" href="https://oeis.org/A212693">positions</a>! That's too much to search through.</p>
+<p>Since there are 7 possible responses to any move (assuming none of the columns are filled), if the AI looks 1 move deep, that's 7 positions to consider. At 2 moves deep, that's 7<sup>2</sup> = 49 positions. At 10 moves deep, that number grows to about a quarter of a Billion. A Connect Four game can have upto 42 moves, and it turns out that there are about 4.5 Trillion unique <a rel="noopener external" target="_blank" href="https://oeis.org/A212693">positions</a>! That's too much to search through.</p>
 <p>But there's another way. Consider the position shown below, where most of White's coins are blocked but Black has several open spots. Black has a clear advantage.</p>
 <p>
     <img src="assets/Example_Position.png" height="260" alt="Illustration of a Connect Four game">
     <em>Position with an advantage for Black</em>
 </p>
-<p>If we could convert this information into a score, we could limit the search depth to, say 5 moves deep, which comes out to around 16,000 positions. At the end of the search, if we haven't reached an end state (win/tie), we could use this score instead. </p>
-<p>This is done in board games using a <strong>heuristic</strong> function, that takes in a board position and outputs a score. </p>
-<p>Creating an accurate (and fast) heuristic is hard. I spent an ungodly amount of time trying to come up with one, and when that failed, I looked to others for inspiration: </p>
+<p>If we could convert this information into a score, we could limit the search depth to, say 5 moves deep, which comes out to around 16,000 positions. At the end of the search, if we haven't reached an end state (win/tie), we could use this score instead.</p>
+<p>This is done in board games using a <strong>heuristic</strong> function, that takes in a board position and outputs a score.</p>
+<p>Creating an accurate (and fast) heuristic is hard. I spent an ungodly amount of time trying to come up with one, and when that failed, I looked to others for inspiration:</p>
 <ul>
-<li><a rel="noopener" target="_blank" href="https://roadtolarissa.com/connect-4-ai-how-it-works/">Adam Pearce</a> generates a score based on the number of open cells that can lead to a 4-in-a-row.</li>
-<li><a rel="noopener" target="_blank" href="https://tleemann.de/four.html">Tobias Leemann</a> uses a pre-trained neural network as an evaluator.</li>
-<li><a rel="noopener" target="_blank" href="https://connect4.gamesolver.org/">Pascal Pons</a> does not use a heuristic, since the AI computes the exact outcome of a position, made possible through tons of clever optimizations.</li>
+<li><a rel="noopener external" target="_blank" href="https://roadtolarissa.com/connect-4-ai-how-it-works/">Adam Pearce</a> generates a score based on the number of open cells that can lead to a 4-in-a-row.</li>
+<li><a rel="noopener external" target="_blank" href="https://tleemann.de/four.html">Tobias Leemann</a> uses a pre-trained neural network as an evaluator.</li>
+<li><a rel="noopener external" target="_blank" href="https://connect4.gamesolver.org/">Pascal Pons</a> does not use a heuristic, since the AI computes the exact outcome of a position, made possible through tons of clever optimizations.</li>
 </ul>
-<p>I ended up using a <a rel="noopener" target="_blank" href="https://file.scirp.org/Html/1-9601415_90972.htm">different approach</a>. It might not be as effective as other heuristics, but it's so simple that it's crazy it even works as well as it does. We assign a value to each cell based on the number of 4-in-a-rows possible from that cell. For example, there are three ways to get 4-in-a-row from the bottom-left cell, so its value is 3.</p>
-<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span>scoremap </span><span style="font-weight:bold;color:#202020;">= </span><span>[
-</span><span>    [</span><span style="color:#707070;">3</span><span>, </span><span style="color:#707070;">4</span><span>,  </span><span style="color:#707070;">5</span><span>,  </span><span style="color:#707070;">7</span><span>,  </span><span style="color:#707070;">5</span><span>, </span><span style="color:#707070;">4</span><span>, </span><span style="color:#707070;">3</span><span>],
-</span><span>    [</span><span style="color:#707070;">4</span><span>, </span><span style="color:#707070;">6</span><span>,  </span><span style="color:#707070;">8</span><span>,  </span><span style="color:#707070;">9</span><span>,  </span><span style="color:#707070;">8</span><span>, </span><span style="color:#707070;">6</span><span>, </span><span style="color:#707070;">4</span><span>],
-</span><span>    [</span><span style="color:#707070;">5</span><span>, </span><span style="color:#707070;">8</span><span>, </span><span style="color:#707070;">11</span><span>, </span><span style="color:#707070;">13</span><span>, </span><span style="color:#707070;">11</span><span>, </span><span style="color:#707070;">8</span><span>, </span><span style="color:#707070;">5</span><span>],
-</span><span>    [</span><span style="color:#707070;">5</span><span>, </span><span style="color:#707070;">8</span><span>, </span><span style="color:#707070;">11</span><span>, </span><span style="color:#707070;">13</span><span>, </span><span style="color:#707070;">11</span><span>, </span><span style="color:#707070;">8</span><span>, </span><span style="color:#707070;">5</span><span>],
-</span><span>    [</span><span style="color:#707070;">4</span><span>, </span><span style="color:#707070;">6</span><span>,  </span><span style="color:#707070;">8</span><span>,  </span><span style="color:#707070;">9</span><span>,  </span><span style="color:#707070;">8</span><span>, </span><span style="color:#707070;">6</span><span>, </span><span style="color:#707070;">4</span><span>],
-</span><span>    [</span><span style="color:#707070;">3</span><span>, </span><span style="color:#707070;">4</span><span>,  </span><span style="color:#707070;">5</span><span>,  </span><span style="color:#707070;">7</span><span>,  </span><span style="color:#707070;">5</span><span>, </span><span style="color:#707070;">4</span><span>, </span><span style="color:#707070;">3</span><span>]
-</span><span>]
-</span></code></pre>
+<p>I ended up using a <a rel="noopener external" target="_blank" href="https://file.scirp.org/Html/1-9601415_90972.htm">different approach</a>. It might not be as effective as other heuristics, but it's so simple that it's crazy it even works as well as it does. We assign a value to each cell based on the number of 4-in-a-rows possible from that cell. For example, there are three ways to get 4-in-a-row from the bottom-left cell, so its value is 3.</p>
+<pre class="giallo" style="color: #24292E; background-color: #FFFFFF;" ><code data-lang="python"><span class="giallo-l"><span>scoremap</span><span style="color: #D73A49;"> =</span><span> [</span></span>
+<span class="giallo-l"><span>    [</span><span style="color: #005CC5;">3</span><span>,</span><span style="color: #005CC5;"> 4</span><span>,</span><span style="color: #005CC5;">  5</span><span>,</span><span style="color: #005CC5;">  7</span><span>,</span><span style="color: #005CC5;">  5</span><span>,</span><span style="color: #005CC5;"> 4</span><span>,</span><span style="color: #005CC5;"> 3</span><span>],</span></span>
+<span class="giallo-l"><span>    [</span><span style="color: #005CC5;">4</span><span>,</span><span style="color: #005CC5;"> 6</span><span>,</span><span style="color: #005CC5;">  8</span><span>,</span><span style="color: #005CC5;">  9</span><span>,</span><span style="color: #005CC5;">  8</span><span>,</span><span style="color: #005CC5;"> 6</span><span>,</span><span style="color: #005CC5;"> 4</span><span>],</span></span>
+<span class="giallo-l"><span>    [</span><span style="color: #005CC5;">5</span><span>,</span><span style="color: #005CC5;"> 8</span><span>,</span><span style="color: #005CC5;"> 11</span><span>,</span><span style="color: #005CC5;"> 13</span><span>,</span><span style="color: #005CC5;"> 11</span><span>,</span><span style="color: #005CC5;"> 8</span><span>,</span><span style="color: #005CC5;"> 5</span><span>],</span></span>
+<span class="giallo-l"><span>    [</span><span style="color: #005CC5;">5</span><span>,</span><span style="color: #005CC5;"> 8</span><span>,</span><span style="color: #005CC5;"> 11</span><span>,</span><span style="color: #005CC5;"> 13</span><span>,</span><span style="color: #005CC5;"> 11</span><span>,</span><span style="color: #005CC5;"> 8</span><span>,</span><span style="color: #005CC5;"> 5</span><span>],</span></span>
+<span class="giallo-l"><span>    [</span><span style="color: #005CC5;">4</span><span>,</span><span style="color: #005CC5;"> 6</span><span>,</span><span style="color: #005CC5;">  8</span><span>,</span><span style="color: #005CC5;">  9</span><span>,</span><span style="color: #005CC5;">  8</span><span>,</span><span style="color: #005CC5;"> 6</span><span>,</span><span style="color: #005CC5;"> 4</span><span>],</span></span>
+<span class="giallo-l"><span>    [</span><span style="color: #005CC5;">3</span><span>,</span><span style="color: #005CC5;"> 4</span><span>,</span><span style="color: #005CC5;">  5</span><span>,</span><span style="color: #005CC5;">  7</span><span>,</span><span style="color: #005CC5;">  5</span><span>,</span><span style="color: #005CC5;"> 4</span><span>,</span><span style="color: #005CC5;"> 3</span><span>]</span></span>
+<span class="giallo-l"><span>]</span></span></code></pre>
 <p>White's score is the sum of cell values for all cells containing a White coin. Black's score is obtained in a similar way. The overall score of the position is the difference between these two values. For the position shown earlier, White's score is <code>58</code> and Black's score is <code>66</code>, making the total score <code>-8</code>, which accurately depicts an advantage for Black.</p>
 <p>We now have everything we need to implement minimax, but there is one small inconvenice, demonstrated in the example below.</p>
 <p><img src="https://balkarjun.github.io/blog/minimax-connect-four/assets/Negamax.png" alt="Illustration of two search trees. On the left, a white node that picks the highest-valued child node. On the right, a black node that picks the lowest-valued child node." />
 <em>Searching one move ahead</em></p>
-<p>White picks <code>max(10, 20, 30)</code> and Black picks <code>min(10, 20, 30)</code>. This means we have to toggle between finding the maximum or minimum score depending on if the AI is looking at a White or Black node. </p>
+<p>White picks <code>max(10, 20, 30)</code> and Black picks <code>min(10, 20, 30)</code>. This means we have to toggle between finding the maximum or minimum score depending on if the AI is looking at a White or Black node.</p>
 <p>But notice that <code>min(a, b) = -max(-a, -b)</code>. So finding <code>min(10, 20, 30)</code> is equivalent to finding <code>-max(-10, -20, -30)</code>. Toggling between the players is now as simple as flipping the signs. This idea gives us the <strong>negamax</strong> algorithm, a variant of minimax that is identical in every way except that it has a simpler implementation.</p>
-<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span style="font-weight:bold;color:#202020;">def </span><span>negamax(board, player, depth):
-</span><span>    </span><span style="font-weight:bold;color:#202020;">if </span><span>depth </span><span style="font-weight:bold;color:#202020;">== </span><span style="color:#707070;">0 </span><span style="font-weight:bold;color:#202020;">or </span><span>end_state_reached(board):
-</span><span>        </span><span style="font-weight:bold;color:#202020;">return </span><span>evaluate(board), </span><span style="font-weight:bold;color:#202020;">-</span><span style="color:#707070;">1
-</span><span>    
-</span><span>    best_score </span><span style="font-weight:bold;color:#202020;">= -</span><span style="color:#707070;">1_000_000
-</span><span>    best_move  </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">0
-</span><span>    
-</span><span>    sign </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">1 </span><span style="font-weight:bold;color:#202020;">if </span><span>(player </span><span style="font-weight:bold;color:#202020;">== </span><span>white) </span><span style="font-weight:bold;color:#202020;">else -</span><span style="color:#707070;">1
-</span><span>    
-</span><span>    </span><span style="font-weight:bold;color:#202020;">for </span><span>icol </span><span style="font-weight:bold;color:#202020;">in </span><span>range(ncols):
-</span><span>        </span><span style="color:#707070;"># skip filled columns
-</span><span>        </span><span style="font-weight:bold;color:#202020;">if </span><span>board[</span><span style="color:#707070;">0</span><span>][icol] </span><span style="font-weight:bold;color:#202020;">!= </span><span style="color:#707070;">0</span><span>:
-</span><span>            </span><span style="font-weight:bold;color:#202020;">continue
-</span><span>        
-</span><span>        make_move(board, player, icol)
-</span><span>        score </span><span style="font-weight:bold;color:#202020;">= </span><span>negamax(board, switch(player), depth </span><span style="font-weight:bold;color:#202020;">- </span><span style="color:#707070;">1</span><span>)[</span><span style="color:#707070;">0</span><span>]
-</span><span>        undo_move(board, player, icol)
-</span><span>
-</span><span>        score </span><span style="font-weight:bold;color:#202020;">*= </span><span>sign
-</span><span>        </span><span style="font-weight:bold;color:#202020;">if </span><span>score </span><span style="font-weight:bold;color:#202020;">&gt; </span><span>best_score:
-</span><span>            best_score </span><span style="font-weight:bold;color:#202020;">= </span><span>score
-</span><span>            best_move  </span><span style="font-weight:bold;color:#202020;">= </span><span>icol
-</span><span>    
-</span><span>    best_score </span><span style="font-weight:bold;color:#202020;">*= </span><span>sign
-</span><span>    </span><span style="font-weight:bold;color:#202020;">return </span><span>best_score, best_move
-</span></code></pre>
+<pre class="giallo" style="color: #24292E; background-color: #FFFFFF;" ><code data-lang="python"><span class="giallo-l"><span style="color: #D73A49;">def</span><span style="color: #6F42C1;"> negamax</span><span>(board, player, depth):</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    if</span><span> depth</span><span style="color: #D73A49;"> ==</span><span style="color: #005CC5;"> 0</span><span style="color: #D73A49;"> or</span><span> end_state_reached(board):</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">        return</span><span> evaluate(board),</span><span style="color: #D73A49;"> -</span><span style="color: #005CC5;">1</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span>    best_score</span><span style="color: #D73A49;"> = -</span><span style="color: #005CC5;">1_000_000</span></span>
+<span class="giallo-l"><span>    best_move</span><span style="color: #D73A49;">  =</span><span style="color: #005CC5;"> 0</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span>    sign</span><span style="color: #D73A49;"> =</span><span style="color: #005CC5;"> 1</span><span style="color: #D73A49;"> if</span><span> (player</span><span style="color: #D73A49;"> ==</span><span> white)</span><span style="color: #D73A49;"> else -</span><span style="color: #005CC5;">1</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    for</span><span> icol</span><span style="color: #D73A49;"> in</span><span style="color: #005CC5;"> range</span><span>(ncols):</span></span>
+<span class="giallo-l"><span style="color: #6A737D;">        # skip filled columns</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">        if</span><span> board[</span><span style="color: #005CC5;">0</span><span>][icol]</span><span style="color: #D73A49;"> !=</span><span style="color: #005CC5;"> 0</span><span>:</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">            continue</span></span>
+<span class="giallo-l"><span>        </span></span>
+<span class="giallo-l"><span>        make_move(board, player, icol)</span></span>
+<span class="giallo-l"><span>        score</span><span style="color: #D73A49;"> =</span><span> negamax(board, switch(player), depth</span><span style="color: #D73A49;"> -</span><span style="color: #005CC5;"> 1</span><span>)[</span><span style="color: #005CC5;">0</span><span>]</span></span>
+<span class="giallo-l"><span>        undo_move(board, player, icol)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>        score</span><span style="color: #D73A49;"> *=</span><span> sign</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">        if</span><span> score</span><span style="color: #D73A49;"> &gt;</span><span> best_score:</span></span>
+<span class="giallo-l"><span>            best_score</span><span style="color: #D73A49;"> =</span><span> score</span></span>
+<span class="giallo-l"><span>            best_move</span><span style="color: #D73A49;">  =</span><span> icol</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span>    best_score</span><span style="color: #D73A49;"> *=</span><span> sign</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    return</span><span> best_score, best_move</span></span></code></pre>
 <p>We need an <code>undo_move</code> since <code>make_move</code> modifies the board and we don't want that modification to be permanent.</p>
-<p>With that, we have a pretty decent AI. I can just about squeeze a win at a search depth of 4, but the AI gets the better of me at greater depths (I'm not very good at this game). It's more fun to have the AIs fight each other. </p>
+<p>With that, we have a pretty decent AI. I can just about squeeze a win at a search depth of 4, but the AI gets the better of me at greater depths (I'm not very good at this game). It's more fun to have the AIs fight each other.</p>
 <p>In fact, the game that was shown at the very start of this post is what happened in a Depth 6 vs Depth 7 match. Despite the slight disadvantage of going second, Black won because it was able to search to a greater depth and find stronger moves.</p>
 <h2 id="making-the-ai-stronger">Making the AI Stronger</h2>
 <p>On my Apple M1 running Python 3.10, it takes about 20 seconds for the AI to make a move at depth 8. It takes much longer at the start, and gets faster as more moves are made, since the time taken depends on how many positions the AI has to evaluate. Here's what that looks like at various depths:</p>
@@ -174,22 +167,21 @@
 <p>In simpler terms, we ignore or <em>prune</em> branches of the search tree that can only lead to a worse score, but still explore paths that could lead to a better score. This technique is called <strong>alpha-beta pruning</strong>.</p>
 <p>Learning and implementing this took me quite a while, but here's the gist of how I went about it. Instead of using just one value to track the best score, we use two — <code>alpha</code>, the current player's best score and <code>beta</code>, the opponent's best score.</p>
 <p>For example, if the current player is White, <code>alpha</code> starts at <code>-infinity</code> and can increase as we find better moves, and <code>beta</code> starts at <code>+infinity</code> and can decrease as the opponent finds better moves. When <code>alpha &gt;= beta</code>, we've reached a situation as shown in the example and we don't need to search any further.</p>
-<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span style="font-weight:bold;color:#202020;">def </span><span>negamax(board, player, alpha, beta, depth):
-</span><span>    ...
-</span><span>    </span><span style="font-weight:bold;color:#202020;">for </span><span>icol </span><span style="font-weight:bold;color:#202020;">in </span><span>range(ncols):
-</span><span>        ...
-</span><span>        score </span><span style="font-weight:bold;color:#202020;">= </span><span>negamax(board, switch(player), beta, alpha, depth </span><span style="font-weight:bold;color:#202020;">- </span><span style="color:#707070;">1</span><span>)[</span><span style="color:#707070;">0</span><span>]
-</span><span>        ...
-</span><span>
-</span><span>        </span><span style="font-weight:bold;color:#202020;">if </span><span>sign</span><span style="font-weight:bold;color:#202020;">*</span><span>score </span><span style="font-weight:bold;color:#202020;">&gt; </span><span>sign</span><span style="font-weight:bold;color:#202020;">*</span><span>alpha:
-</span><span>            alpha </span><span style="font-weight:bold;color:#202020;">= </span><span>score
-</span><span>            best_move </span><span style="font-weight:bold;color:#202020;">= </span><span>icol
-</span><span>
-</span><span>        </span><span style="font-weight:bold;color:#202020;">if </span><span>sign</span><span style="font-weight:bold;color:#202020;">*</span><span>alpha </span><span style="font-weight:bold;color:#202020;">&gt;= </span><span>sign</span><span style="font-weight:bold;color:#202020;">*</span><span>beta:
-</span><span>            </span><span style="font-weight:bold;color:#202020;">break
-</span><span>
-</span><span>    </span><span style="font-weight:bold;color:#202020;">return </span><span>alpha, best_move
-</span></code></pre>
+<pre class="giallo" style="color: #24292E; background-color: #FFFFFF;" ><code data-lang="python"><span class="giallo-l"><span style="color: #D73A49;">def</span><span style="color: #6F42C1;"> negamax</span><span>(board, player, alpha, beta, depth):</span></span>
+<span class="giallo-l"><span style="color: #005CC5;">    ...</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    for</span><span> icol</span><span style="color: #D73A49;"> in</span><span style="color: #005CC5;"> range</span><span>(ncols):</span></span>
+<span class="giallo-l"><span style="color: #005CC5;">        ...</span></span>
+<span class="giallo-l"><span>        score</span><span style="color: #D73A49;"> =</span><span> negamax(board, switch(player), beta, alpha, depth</span><span style="color: #D73A49;"> -</span><span style="color: #005CC5;"> 1</span><span>)[</span><span style="color: #005CC5;">0</span><span>]</span></span>
+<span class="giallo-l"><span style="color: #005CC5;">        ...</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #D73A49;">        if</span><span> sign</span><span style="color: #D73A49;">*</span><span>score</span><span style="color: #D73A49;"> &gt;</span><span> sign</span><span style="color: #D73A49;">*</span><span>alpha:</span></span>
+<span class="giallo-l"><span>            alpha</span><span style="color: #D73A49;"> =</span><span> score</span></span>
+<span class="giallo-l"><span>            best_move</span><span style="color: #D73A49;"> =</span><span> icol</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #D73A49;">        if</span><span> sign</span><span style="color: #D73A49;">*</span><span>alpha</span><span style="color: #D73A49;"> &gt;=</span><span> sign</span><span style="color: #D73A49;">*</span><span>beta:</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">            break</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #D73A49;">    return</span><span> alpha, best_move</span></span></code></pre>
 <p>Comparing regular minimax to minimax with alpha-beta pruning, we see a <em>huge</em> reduction in the number of evaluations:</p>
 <table><thead><tr><th>Depth</th><th>Mean Evals <br> <em>minimax</em></th><th>Mean Evals <br> <em>alpha-beta</em></th></tr></thead><tbody>
 <tr><td>5</td><td>7,783</td><td>1,422</td></tr>
@@ -199,46 +191,42 @@
 </tbody></table>
 <p>That's 50x fewer nodes at depth 8! The speed improves by almost the same factor.<br />
 Mean Time at Depth 8: <strong>0.51 sec</strong></p>
-<p>The best part about alpha-beta pruning is that the moves found will be the exact same as regular minimax, it just does so by searching fewer nodes. </p>
+<p>The best part about alpha-beta pruning is that the moves found will be the exact same as regular minimax, it just does so by searching fewer nodes.</p>
 <h3 id="optimization-2-speeding-up-evaluations-with-bitboards">Optimization #2 <br> Speeding up Evaluations with Bitboards</h3>
-<p>If you'd like a thorough explanation of bitboards and how to implement them for Connect Four, check out <a rel="noopener" target="_blank" href="https://www.github.com/denkspuren/BitboardC4/blob/master/BitboardDesign.md">this excellent resource</a>.</p>
+<p>If you'd like a thorough explanation of bitboards and how to implement them for Connect Four, check out <a rel="noopener external" target="_blank" href="https://www.github.com/denkspuren/BitboardC4/blob/master/BitboardDesign.md">this excellent resource</a>.</p>
 <p>The basic idea is this — instead of using an array, we will use a 64-bit number to represent the game board. This data structure, called a <strong>bitboard</strong>, is commonly used in board games to efficiently represent the game state. The bits (numbered 0 to 63) are laid out as shown:</p>
-<pre style="background-color:#ffffff;color:#202020;"><code><span>  6 13 20 27 34 41 48   55 62   
-</span><span> —————————————————————          
-</span><span>│ 5 12 19 26 33 40 47 │ 54 61   
-</span><span>│ 4 11 18 25 32 39 46 │ 53 60   
-</span><span>│ 3 10 17 24 31 38 45 │ 52 59   
-</span><span>│ 2  9 16 23 30 37 44 │ 51 58   
-</span><span>│ 1  8 15 22 29 36 43 │ 50 57   
-</span><span>│ 0  7 14 21 28 35 42 │ 49 56 63
-</span><span> —————————————————————          
-</span></code></pre>
+<pre class="giallo" style="color: #24292E; background-color: #FFFFFF;" ><code data-lang="plain"><span class="giallo-l"><span>  6 13 20 27 34 41 48   55 62   </span></span>
+<span class="giallo-l"><span> —————————————————————          </span></span>
+<span class="giallo-l"><span>│ 5 12 19 26 33 40 47 │ 54 61   </span></span>
+<span class="giallo-l"><span>│ 4 11 18 25 32 39 46 │ 53 60   </span></span>
+<span class="giallo-l"><span>│ 3 10 17 24 31 38 45 │ 52 59   </span></span>
+<span class="giallo-l"><span>│ 2  9 16 23 30 37 44 │ 51 58   </span></span>
+<span class="giallo-l"><span>│ 1  8 15 22 29 36 43 │ 50 57   </span></span>
+<span class="giallo-l"><span>│ 0  7 14 21 28 35 42 │ 49 56 63</span></span>
+<span class="giallo-l"><span> —————————————————————          </span></span></code></pre>
 <p>A cell can have one of three states — It's either empty, has a White coin, or has a Black coin. We can represent this using two bitboards, one for each player. The entire game state can now be represented with just these values:</p>
-<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span>bitboards </span><span style="font-weight:bold;color:#202020;">= </span><span>[
-</span><span>    </span><span style="color:#707070;">0b0000000000000000000000000000000000000000000000000000000000000000</span><span>,
-</span><span>    </span><span style="color:#707070;">0b0000000000000000000000000000000000000000000000000000000000000000
-</span><span>]
-</span><span>counter </span><span style="font-weight:bold;color:#202020;">= </span><span style="color:#707070;">0
-</span><span>heights </span><span style="font-weight:bold;color:#202020;">= </span><span>[</span><span style="color:#707070;">0</span><span>,  </span><span style="color:#707070;">7</span><span>, </span><span style="color:#707070;">14</span><span>, </span><span style="color:#707070;">21</span><span>, </span><span style="color:#707070;">28</span><span>, </span><span style="color:#707070;">35</span><span>, </span><span style="color:#707070;">42</span><span>]
-</span><span style="color:#707070;"># bit positions for the top padding row
-</span><span>pad_top </span><span style="font-weight:bold;color:#202020;">= </span><span>[</span><span style="color:#707070;">6</span><span>, </span><span style="color:#707070;">13</span><span>, </span><span style="color:#707070;">20</span><span>, </span><span style="color:#707070;">27</span><span>, </span><span style="color:#707070;">34</span><span>, </span><span style="color:#707070;">41</span><span>, </span><span style="color:#707070;">48</span><span>]
-</span></code></pre>
+<pre class="giallo" style="color: #24292E; background-color: #FFFFFF;" ><code data-lang="python"><span class="giallo-l"><span>bitboards</span><span style="color: #D73A49;"> =</span><span> [</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    0b</span><span style="color: #005CC5;">0000000000000000000000000000000000000000000000000000000000000000</span><span>,</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    0b</span><span style="color: #005CC5;">0000000000000000000000000000000000000000000000000000000000000000</span></span>
+<span class="giallo-l"><span>]</span></span>
+<span class="giallo-l"><span>counter</span><span style="color: #D73A49;"> =</span><span style="color: #005CC5;"> 0</span></span>
+<span class="giallo-l"><span>heights</span><span style="color: #D73A49;"> =</span><span> [</span><span style="color: #005CC5;">0</span><span>,</span><span style="color: #005CC5;">  7</span><span>,</span><span style="color: #005CC5;"> 14</span><span>,</span><span style="color: #005CC5;"> 21</span><span>,</span><span style="color: #005CC5;"> 28</span><span>,</span><span style="color: #005CC5;"> 35</span><span>,</span><span style="color: #005CC5;"> 42</span><span>]</span></span>
+<span class="giallo-l"><span style="color: #6A737D;"># bit positions for the top padding row</span></span>
+<span class="giallo-l"><span>pad_top</span><span style="color: #D73A49;"> =</span><span> [</span><span style="color: #005CC5;">6</span><span>,</span><span style="color: #005CC5;"> 13</span><span>,</span><span style="color: #005CC5;"> 20</span><span>,</span><span style="color: #005CC5;"> 27</span><span>,</span><span style="color: #005CC5;"> 34</span><span>,</span><span style="color: #005CC5;"> 41</span><span>,</span><span style="color: #005CC5;"> 48</span><span>]</span></span></code></pre>
 <p>We increment <code>counter</code> each time a move is made. If its value is even, the current player is White, else Black. The <code>heights</code> array stores the bit position for the next free cell in each column. Notice that if a column is full, its value in the <code>heights</code> array will match the value in the <code>pad_top</code> array.</p>
 <p>This compact representation allows for optimizations that makes things faster. Making a move is now as easy as:</p>
-<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span style="font-weight:bold;color:#202020;">def </span><span>make_move(state, icol):
-</span><span>    </span><span style="color:#707070;"># set the appropriate bit for the current player to 1
-</span><span>    bitboards[counter </span><span style="font-weight:bold;color:#202020;">&amp; </span><span style="color:#707070;">1</span><span>] </span><span style="font-weight:bold;color:#202020;">^= </span><span>(</span><span style="color:#707070;">1 </span><span style="font-weight:bold;color:#202020;">&lt;&lt; </span><span>heights[icol])
-</span><span>
-</span><span>    counter </span><span style="font-weight:bold;color:#202020;">+= </span><span style="color:#707070;">1
-</span><span>    heights[icol] </span><span style="font-weight:bold;color:#202020;">+= </span><span style="color:#707070;">1
-</span></code></pre>
+<pre class="giallo" style="color: #24292E; background-color: #FFFFFF;" ><code data-lang="python"><span class="giallo-l"><span style="color: #D73A49;">def</span><span style="color: #6F42C1;"> make_move</span><span>(state, icol):</span></span>
+<span class="giallo-l"><span style="color: #6A737D;">    # set the appropriate bit for the current player to 1</span></span>
+<span class="giallo-l"><span>    bitboards[counter</span><span style="color: #D73A49;"> &amp;</span><span style="color: #005CC5;"> 1</span><span>]</span><span style="color: #D73A49;"> ^=</span><span> (</span><span style="color: #005CC5;">1</span><span style="color: #D73A49;"> &lt;&lt;</span><span> heights[icol])</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>    counter</span><span style="color: #D73A49;"> +=</span><span style="color: #005CC5;"> 1</span></span>
+<span class="giallo-l"><span>    heights[icol]</span><span style="color: #D73A49;"> +=</span><span style="color: #005CC5;"> 1</span></span></code></pre>
 <p>Checking for wins is also much more efficient. For instance, lets consider the positive diagonal. Notice from the way we've laid out the bits, that the positive diagonal cells differ by a value of <code>8</code>. For example, the bit to the top-right of bit <code>14</code> is bit <code>22</code>. So for each bit, we can look at the bits that are <code>8</code>, <code>16</code> and <code>24</code> bits away, and if they are all set to 1, we have a 4-in-a-row along the positive diagonal.</p>
 <p><img src="https://balkarjun.github.io/blog/minimax-connect-four/assets/Bitboard.png" alt="Illustration showing the process for finding four-in-a-row using bitboards" /></p>
-<p>We can actually check this for every bit simultaneously, as shown above.  Highlighted in orange are the bits that are in common so far. Notice that if there is a 4-in-a-row, there will be atleast one non-zero bit at the end. The implementation is as shown: </p>
-<pre data-lang="py" style="background-color:#ffffff;color:#202020;" class="language-py "><code class="language-py" data-lang="py"><span>board </span><span style="font-weight:bold;color:#202020;">= </span><span>bitboards[</span><span style="color:#707070;">1</span><span>] </span><span style="color:#707070;"># bitboard for Black
-</span><span style="font-weight:bold;color:#202020;">if </span><span>board </span><span style="font-weight:bold;color:#202020;">&amp; </span><span>(board </span><span style="font-weight:bold;color:#202020;">&gt;&gt; </span><span style="color:#707070;">8</span><span>) </span><span style="font-weight:bold;color:#202020;">&amp; </span><span>(board </span><span style="font-weight:bold;color:#202020;">&gt;&gt; </span><span style="color:#707070;">16</span><span>) </span><span style="font-weight:bold;color:#202020;">&amp; </span><span>(board </span><span style="font-weight:bold;color:#202020;">&gt;&gt; </span><span style="color:#707070;">24</span><span>) </span><span style="font-weight:bold;color:#202020;">!= </span><span style="color:#707070;">0</span><span>: 
-</span><span>    </span><span style="font-weight:bold;color:#202020;">return </span><span style="color:#707070;">1 # 1 indicates a win for Black
-</span></code></pre>
+<p>We can actually check this for every bit simultaneously, as shown above.  Highlighted in orange are the bits that are in common so far. Notice that if there is a 4-in-a-row, there will be atleast one non-zero bit at the end. The implementation is as shown:</p>
+<pre class="giallo" style="color: #24292E; background-color: #FFFFFF;" ><code data-lang="python"><span class="giallo-l"><span>board</span><span style="color: #D73A49;"> =</span><span> bitboards[</span><span style="color: #005CC5;">1</span><span>]</span><span style="color: #6A737D;"> # bitboard for Black</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">if</span><span> board</span><span style="color: #D73A49;"> &amp;</span><span> (board</span><span style="color: #D73A49;"> &gt;&gt;</span><span style="color: #005CC5;"> 8</span><span>)</span><span style="color: #D73A49;"> &amp;</span><span> (board</span><span style="color: #D73A49;"> &gt;&gt;</span><span style="color: #005CC5;"> 16</span><span>)</span><span style="color: #D73A49;"> &amp;</span><span> (board</span><span style="color: #D73A49;"> &gt;&gt;</span><span style="color: #005CC5;"> 24</span><span>)</span><span style="color: #D73A49;"> !=</span><span style="color: #005CC5;"> 0</span><span>: </span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    return</span><span style="color: #005CC5;"> 1</span><span style="color: #6A737D;"> # 1 indicates a win for Black</span></span></code></pre>
 <p>We can do the same for the other directions. For example, the horizontal cells differ by a value of <code>7</code>. We can check the offsets <code>7</code>, <code>14</code> and <code>21</code> to find horizontal wins.</p>
 <p>With these optimizations, our AI is almost twice as fast.</p>
 <table><thead><tr><th>Depth</th><th>Mean Time <br> <em>2d-array</em></th><th>Mean Time <br> <em>bitboard</em></th></tr></thead><tbody>
@@ -248,12 +236,12 @@ Mean Time at Depth 8: <strong>0.51 sec</strong></p>
 <tr><td>8</td><td>0.509</td><td>0.268</td></tr>
 </tbody></table>
 <p>Mean Time at Depth 8: <strong>0.27 sec</strong></p>
-<p>Comparing mean times at depth 8, we have ended up almost 100x faster than our original minimax implementation! There are ways to speed up the AI even more, but I decided to stop here. </p>
+<p>Comparing mean times at depth 8, we have ended up almost 100x faster than our original minimax implementation! There are ways to speed up the AI even more, but I decided to stop here.</p>
 <h2 id="web-demo">Web Demo</h2>
-<p>I ported the code over to C++, which ended up being around 250x faster than our fastest Python implementation! I compiled it to WebAssembly and created a web interface. View the <a rel="noopener" target="_blank" href="https://github.com/balkarjun/ConnectFourAI/">source code</a> or play directly on your browser.</p>
+<p>I ported the code over to C++, which ended up being around 250x faster than our fastest Python implementation! I compiled it to WebAssembly and created a web interface. View the <a rel="noopener external" target="_blank" href="https://github.com/balkarjun/ConnectFourAI/">source code</a> or play directly on your browser.</p>
 <p><a class="primary-button" target="_blank" href="https://balkarjun.github.io/ConnectFourAI/">Play the Demo</a></p>
 <h2 id="what-next">What Next?</h2>
-<p>If you're interested in more optimization techniques, check out <a rel="noopener" target="_blank" href="http://blog.gamesolver.org/">this resource</a>. It's worth noting that a lot of these optimizations work better with a good heuristic. While our simple heuristic works to some extent, it fails to provide an accurate evaluation for more complex positions. Moving beyond Connect Four, there are board games for which creating a good heuristic is nearly impossible.</p>
+<p>If you're interested in more optimization techniques, check out <a rel="noopener external" target="_blank" href="http://blog.gamesolver.org/">this resource</a>. It's worth noting that a lot of these optimizations work better with a good heuristic. While our simple heuristic works to some extent, it fails to provide an accurate evaluation for more complex positions. Moving beyond Connect Four, there are board games for which creating a good heuristic is nearly impossible.</p>
 <p>In a follow-up blog post, I'll explore a completely different technique to creating the AI, one that does not require a heuristic at all. DeepMind used this technique as part of their AlphaGo AI to achieve a breakthrough result in 2016.</p>
 
     </div>
@@ -261,14 +249,19 @@ Mean Time at Depth 8: <strong>0.51 sec</strong></p>
 
 
     <footer>
-        <span>© 2024–2025 <strong>Arjun Balakrishnan</strong></span>
+        <span>© 2024–<span id="year"></span> <strong>Arjun Balakrishnan</strong></span>
         <div>
-            <a target="_blank" href="https://www.github.com/balkarjun">GitHub</a>
-            <i>·</i>
-            <a target="_blank" href="https://www.linkedin.com/in/balkarjun">LinkedIn</a>
+            <a class="icon-link" target="_blank" href="https://www.github.com/balkarjun" aria-label="GitHub">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/></svg>
+            </a>
+            <a class="icon-link" target="_blank" href="https://www.linkedin.com/in/balkarjun" aria-label="LinkedIn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/></svg>
+            </a>
             <i>·</i>
             balkarjun<i>[at]</i>gmail<i>[dot]</i>com
         </div>
     </footer>
+    
+    <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 </body>
 </html>

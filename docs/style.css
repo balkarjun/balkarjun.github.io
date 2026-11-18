@@ -80,7 +80,7 @@ body {
     font-size: 1.1em;
     line-height: 1.4;
     color: #222222;
-    max-width: 700px;
+    max-width: 750px;
     margin: 2em auto;
     padding: 0 0.8em;
     overflow-y: scroll;
@@ -126,6 +126,21 @@ footer a {
 
 footer a:hover {
     text-decoration-color: #666666;
+}
+
+footer .icon-link {
+    text-decoration: none;
+    padding-right: 0.2em;
+}
+
+footer .icon-link:hover {
+    color: #222222;
+}
+
+footer .icon-link svg {
+    width: 1.1em;
+    height: 1.1em;
+    vertical-align: -0.15em;
 }
 
 footer i {
@@ -227,6 +242,22 @@ a {
 
 a:hover {
     text-decoration-color: var(--blue);
+}
+
+/* Home Page */
+#home .profile-picture {
+    float: right;
+    width: 180px;
+    height: auto;
+    margin: 0.75em 0.25em 1em 1em;
+    border-radius: 0.3em;
+}
+
+@media (max-width: 500px) {
+    #home .profile-picture {
+        width: 120px;
+        margin-left: 1em;
+    }
 }
 
 /* Blog Page */
