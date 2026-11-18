@@ -72,9 +72,20 @@
 }
 
 :root {
-    --blue: #0273b2;
-    --blue-subtle: #dff4ff;
-    --orange: #b7510b;
+    --surface-page: #fffbf4;   /* warm cream page */
+    --surface-card: #f5f0e8;   /* slightly darker paper: buttons */
+    --text-headings: #2b2b2b;
+    --text-body: #2b2b2be6;    /* near-black at 90% */
+    --text-muted: #746960;     /* warm brown-gray */
+    --divider: #dad3c7;
+    --accent: #a87b4f;         /* tan ink: underlines, selection, name */
+    --accent-ink: #7a5330;     /* darker tan for small accent text (readable contrast) */
+    --accent-subtle: color-mix(in srgb, var(--accent) 16%, var(--surface-card));
+
+    /* Paper texture */
+    --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/></svg>");
+    --fiber: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='turbulence' baseFrequency='1.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.024'/></svg>");
+    --edge-shade: radial-gradient(140% 110% at 50% 0%, transparent 55%, #efe6d6 100%);
 
     --font-heading: 'EB Garamond', Georgia, serif;
     --font-body: 'Hanken Grotesk', system-ui, sans-serif;
@@ -91,11 +102,30 @@ body {
     font-family: var(--font-body);
     font-size: 1.1em;
     line-height: 1.4;
-    color: #222222;
+    color: var(--text-body);
+    background-color: var(--surface-page);
+    background-image: var(--grain), var(--edge-shade);
+    background-attachment: scroll, fixed;
     max-width: 750px;
     margin: 2em auto;
     padding: 0 0.8em;
     overflow-y: scroll;
+}
+
+/* Paper fibers: a fixed sheet over the whole page */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+    background-image: var(--fiber);
+    mix-blend-mode: multiply;
+}
+
+::selection {
+    background-color: var(--accent);
+    color: var(--surface-page);
 }
 
 header {
@@ -106,11 +136,11 @@ header span {
     display: block;
     font-size: 1.25em;
     font-weight: 600;
-    color: var(--orange);
+    color: var(--accent);
 }
 
 nav a {
-    color: #222222;
+    color: var(--text-headings);
     text-decoration: none;
     padding-right: 0.4em;
     font-weight: 500;
@@ -118,12 +148,12 @@ nav a {
 
 nav a:hover, .nav-active {
     text-decoration: underline;
-    text-decoration-color: #222222;
+    text-decoration-color: var(--accent);
 }
 
 footer {
     font-size: 0.9em;
-    color: #666666;
+    color: var(--text-muted);
     margin-top: 1em;
 }
 
@@ -132,12 +162,12 @@ footer strong {
 }
 
 footer a {
-    color: #666666;
-    text-decoration-color: #eeeeee;
+    color: var(--text-muted);
+    text-decoration-color: var(--divider);
 }
 
 footer a:hover {
-    text-decoration-color: #666666;
+    text-decoration-color: var(--text-muted);
 }
 
 footer .icon-link {
@@ -146,7 +176,7 @@ footer .icon-link {
 }
 
 footer .icon-link:hover {
-    color: #222222;
+    color: var(--text-headings);
 }
 
 footer .icon-link svg {
@@ -157,7 +187,7 @@ footer .icon-link svg {
 
 footer i {
     font-style: normal;
-    color: #707070;
+    color: var(--text-muted);
     padding: 0 0.1em;
 }
 
@@ -165,6 +195,7 @@ h1, h2, h3, h4 {
     font-family: var(--font-heading);
     font-weight: 400;
     line-height: 1.15;
+    color: var(--text-headings);
 }
 
 h1 {
@@ -209,11 +240,11 @@ table {
 }
 
 th, td {
-    border: 1px solid #dddddd;
+    border: 1px solid var(--divider);
 }
 
 th {
-    background-color: #f6f6f6;
+    background-color: var(--surface-page);
     padding: 0.25em 0.5em;
     text-align: left;
 }
@@ -230,7 +261,8 @@ pre {
     padding: 1em;
     margin: 1em 0;
     overflow-x: auto;
-    border: 1px solid #eee;
+    border: 1px solid var(--divider);
+    background-color: var(--surface-page) !important;
 }
 
 code {
@@ -242,7 +274,7 @@ code {
 img + em {
     display: block;
     text-align: center;
-    color: #666666;
+    color: var(--text-muted);
 }
 
 p {
@@ -251,10 +283,11 @@ p {
 }
 
 p code {
-    color: #666666;
+    color: var(--text-muted);
     font-weight: 500;
     padding: 0 0.3em;
-    border: 1px solid #eeeeee;
+    background-color: var(--surface-page);
+    border: 1px solid var(--divider);
     border-radius: 0.2em;
 }
 
@@ -264,12 +297,14 @@ sup {
 }
 
 a {
-    color: var(--blue);
-    text-decoration-color: var(--blue-subtle);
+    color: var(--text-headings);
+    text-decoration-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    text-underline-offset: 0.15em;
 }
 
 a:hover {
-    text-decoration-color: var(--blue);
+    color: var(--accent-ink);
+    text-decoration-color: var(--accent);
 }
 
 /* Home Page */
@@ -300,10 +335,15 @@ a:hover {
     margin: 0 auto;
 }
 
+#blog-page img, #projects img {
+    mix-blend-mode: multiply;
+}
+
 #blog-page .primary-button {
     display: block; 
     padding: 0.5em 4em; 
-    background-color: var(--blue-subtle);
+    background-color: var(--accent-subtle);
+    color: var(--accent-ink);
     font-weight: 500;
     border-radius: 3px; 
     text-align: center; 
@@ -312,7 +352,7 @@ a:hover {
 }
 
 #blog-page h3 {
-    color: #444444;
+    color: var(--text-body);
 }
 
 /* List of Blogs  */
@@ -323,14 +363,18 @@ a:hover {
 #blog ul a {
     font-family: var(--font-heading);
     font-size: 1.2em;
-    color: #222222;
+    color: var(--text-headings);
     text-decoration: underline;
-    text-decoration-color: #cccccc;
+    text-decoration-color: var(--divider);
+}
+
+#blog ul a:hover {
+    text-decoration-color: var(--accent);
 }
 
 #blog ul span {
     margin-left: 0.1em;
-    color: #999999;
+    color: var(--text-muted);
 }
 
 /* List of Projects */
@@ -357,14 +401,15 @@ a:hover {
 #projects .links a {
     font-size: 0.9em;
     font-weight: 500;
+    color: var(--accent-ink);
     text-decoration: none;
     padding: 0.2em 0.8em;
-    background-color: var(--blue-subtle);
+    background-color: var(--accent-subtle);
     border-radius: 0.2em;
 }
 
 #projects .project-date {
-    color: #666666;
+    color: var(--text-muted);
     padding-left: 0.1em;
     font-size: 0.9em;
 }
