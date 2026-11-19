@@ -206,7 +206,7 @@ h1, h2, h3, h4 {
 }
 
 /* Ink-bleed: rough, slightly bled edges on serif text (SVG filter in base.html) */
-h1, h2, h3, h4, #blog ul a {
+h1, h2, h3, h4 {
     filter: url(#ink-bleed);
 }
 
@@ -387,26 +387,89 @@ a:hover {
     color: var(--text-body);
 }
 
-/* List of Blogs  */
-#blog ul {
-    list-style-type: none;
+/* List of Blogs: compact rows (square thumbnail beside the text) */
+#blog .posts {
+    list-style: none;
+    margin: 1em 0 2.5em;
 }
 
-#blog ul a {
-    font-family: var(--font-heading);
-    font-size: 1.2em;
+#blog .post {
+    display: grid;
+    grid-template-columns: 124px 1fr;
+    gap: 1.3em;
+    align-items: start;
+    padding: 1.1em 0;
+    border-bottom: 1px solid var(--divider);
+}
+
+/* Cover in a paper frame; white diagram backgrounds blend into it */
+#blog .thumb {
+    position: relative;
+    display: block;
+    aspect-ratio: 1;
+    background-color: var(--surface-page);
+    border: 1px solid var(--divider);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+#blog .thumb img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding: 6%;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+}
+
+#blog .post-meta {
+    font-size: 0.85em;
+    color: var(--text-muted);
+}
+
+#blog .post h4 {
+    font-size: 1.25em;
+    margin: 0.1em 0 0.25em;
+}
+
+#blog .post h4 a {
     color: var(--text-headings);
-    text-decoration: underline;
-    text-decoration-color: var(--divider);
+    text-decoration: none;
 }
 
-#blog ul a:hover {
+#blog .post h4 a:hover {
+    text-decoration: underline;
     text-decoration-color: var(--accent);
 }
 
-#blog ul span {
-    margin-left: 0.1em;
-    color: var(--text-muted);
+#blog .post p {
+    margin: 0;
+    text-align: justify;
+    font-size: 0.95em;
+}
+
+/* Phones: list layout, wide cover above the text, full description */
+@media (max-width: 500px) {
+    #blog .post {
+        grid-template-columns: 1fr;
+        gap: 0.8em;
+        padding: 0 0 2.2em;
+        border-bottom: none;
+    }
+
+    #blog .thumb {
+        aspect-ratio: 16 / 9;
+    }
+
+    #blog .thumb img {
+        padding: 8%;
+    }
+
+    #blog .post h4 {
+        font-size: 1.45em;
+        margin: 0.15em 0 0.35em;
+    }
 }
 
 /* List of Projects */

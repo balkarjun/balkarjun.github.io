@@ -17,11 +17,17 @@
 <section id="blog">
     {% for year, pages in section.pages | group_by(attribute="year") %}
     <h3>{{ year }}</h3>
-    <ul>
+    <ul class="posts">
         {% for page in pages %}
-        <li>
-            <a href="{{ page.permalink | safe }}">{{ page.title }}</a>
-            <span>{{ page.date | date(format = "%b") }}</span>
+        <li class="post">
+            <a class="thumb" href="{{ page.permalink | safe }}" aria-hidden="true" tabindex="-1">
+                {% if page.extra.cover %}<img src="{{ page.permalink ~ page.extra.cover | safe }}" alt="" loading="lazy">{% endif %}
+            </a>
+            <div>
+                <div class="post-meta">{{ page.date | date(format="%-d %b") }} · {{ page.reading_time }} min read</div>
+                <h4><a href="{{ page.permalink | safe }}">{{ page.title }}</a></h4>
+                <p>{{ page.description }}</p>
+            </div>
         </li>
         {% endfor %}
     </ul>

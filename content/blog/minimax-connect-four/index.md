@@ -1,7 +1,10 @@
 +++
 title = "Exploring Board Game AI Algorithms: Minimax"
-description = "How does a board game AI think? In this blog post I discuss the popular Minimax algorithm in the context of creating an AI to play Connect Four, along with optimizations to make it go fast."
+description = "How does a board game AI think? In this post I discuss the Minimax algorithm in the context of creating an AI to play Connect Four, along with optimizations to make it go fast."
 date = 2024-06-15
+
+[extra]
+cover = "assets/Example_Game.png"
 +++
 
 Computers are *very* good at playing board games. Traditionally for games like Chess, algorithms like Minimax and Alpha-Beta Pruning were used to search for moves. More recently, techniques like Monte-Carlo Tree Search and Reinforcement Learning have made these AIs more formidable. 
