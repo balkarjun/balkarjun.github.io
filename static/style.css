@@ -104,23 +104,30 @@ body {
     line-height: 1.4;
     color: var(--text-body);
     background-color: var(--surface-page);
-    background-image: var(--grain), var(--edge-shade);
-    background-attachment: scroll, fixed;
+    background-image: var(--grain);
     max-width: 750px;
     margin: 2em auto;
     padding: 0 0.8em;
     overflow-y: scroll;
 }
 
-/* Paper fibers: a fixed sheet over the whole page */
-body::after {
+body::before, body::after {
     content: "";
     position: fixed;
     inset: 0;
-    z-index: 10;
     pointer-events: none;
+}
+
+/* Edge shading: behind the content, in front of the grain */
+body::before {
+    z-index: -1;
+    background-image: var(--edge-shade);
+}
+
+/* Paper fibers: a faint sheet over the whole page */
+body::after {
+    z-index: 10;
     background-image: var(--fiber);
-    mix-blend-mode: multiply;
 }
 
 ::selection {
@@ -196,6 +203,11 @@ h1, h2, h3, h4 {
     font-weight: 400;
     line-height: 1.15;
     color: var(--text-headings);
+}
+
+/* Ink-bleed: rough, slightly bled edges on serif text (SVG filter in base.html) */
+h1, h2, h3, h4, #blog ul a {
+    filter: url(#ink-bleed);
 }
 
 h1 {

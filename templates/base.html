@@ -17,6 +17,17 @@
     </script>
 </head>
 <body>
+    <!-- Ink-bleed filter for headings (see .css: filter: url(#ink-bleed)) -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <filter id="ink-bleed" x="-15%" y="-15%" width="130%" height="130%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4" result="noise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="1" result="disp"/>
+            <feComponentTransfer in="noise" result="stipple"><feFuncA type="linear" slope="20" intercept="-20"/></feComponentTransfer>
+            <feComposite in="disp" in2="stipple" operator="in" result="speckle"/>
+            <feMerge><feMergeNode in="speckle"/><feMergeNode in="disp"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+    </svg>
+
     {% block content %}
     {% endblock %}
 
