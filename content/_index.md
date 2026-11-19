@@ -2,8 +2,7 @@
 template = "index.html"
 +++
 
-### Hey...
-I'm Arjun.
+# Hey… *I'm Arjun.*
 
 This is my little corner where I write down my thoughts, learnings and experiments.
 
@@ -17,7 +16,9 @@ Although developing and making use of AI tools is part of my day job, I share th
 
 Want to collaborate? Feel free to reach out using the contact info in the footer :)
 
-### Colophon
+---
+
+## Colophon
 I write in Markdown and use [Zola SSG](https://www.getzola.org/) to convert it to HTML and CSS. I try to avoid JavaScript when I can; I use just a *tiny* bit of it to measure page views.
 
 The fonts are EB Garamond, Hanken Grotesk and IBM Plex Mono. All illustrations are mine, drawn using Procreate.
