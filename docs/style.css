@@ -14,59 +14,82 @@
     font-weight: 500;
     src: url('./fonts/ibm-plex-mono-v19-latin-500.woff2') format('woff2');
 }
-/* ibm-plex-sans-regular - latin */
+/* eb-garamond-regular - latin */
 @font-face {
     font-display: swap;
-    font-family: 'IBM Plex Sans';
+    font-family: 'EB Garamond';
     font-style: normal;
     font-weight: 400;
-    src: url('./fonts/ibm-plex-sans-v19-latin-regular.woff2') format('woff2');
+    src: url('./fonts/eb-garamond-v33-latin-regular.woff2') format('woff2');
 }
-/* ibm-plex-sans-italic - latin */
+/* eb-garamond-italic - latin */
 @font-face {
     font-display: swap;
-    font-family: 'IBM Plex Sans';
+    font-family: 'EB Garamond';
     font-style: italic;
     font-weight: 400;
-    src: url('./fonts/ibm-plex-sans-v19-latin-italic.woff2') format('woff2');
+    src: url('./fonts/eb-garamond-v33-latin-italic.woff2') format('woff2');
 }
-/* ibm-plex-sans-500 - latin */
+/* eb-garamond-500 - latin */
 @font-face {
     font-display: swap;
-    font-family: 'IBM Plex Sans';
+    font-family: 'EB Garamond';
     font-style: normal;
     font-weight: 500;
-    src: url('./fonts/ibm-plex-sans-v19-latin-500.woff2') format('woff2');
+    src: url('./fonts/eb-garamond-v33-latin-500.woff2') format('woff2');
 }
-/* ibm-plex-sans-500italic - latin */
+/* hanken-grotesk-regular - latin */
 @font-face {
     font-display: swap;
-    font-family: 'IBM Plex Sans';
+    font-family: 'Hanken Grotesk';
+    font-style: normal;
+    font-weight: 400;
+    src: url('./fonts/hanken-grotesk-v12-latin-regular.woff2') format('woff2');
+}
+/* hanken-grotesk-italic - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'Hanken Grotesk';
     font-style: italic;
-    font-weight: 500;
-    src: url('./fonts/ibm-plex-sans-v19-latin-500italic.woff2') format('woff2');
+    font-weight: 400;
+    src: url('./fonts/hanken-grotesk-v12-latin-italic.woff2') format('woff2');
 }
-  /* ibm-plex-sans-600 - latin */
+/* hanken-grotesk-500 - latin */
 @font-face {
     font-display: swap;
-    font-family: 'IBM Plex Sans';
+    font-family: 'Hanken Grotesk';
+    font-style: normal;
+    font-weight: 500;
+    src: url('./fonts/hanken-grotesk-v12-latin-500.woff2') format('woff2');
+}
+/* hanken-grotesk-600 - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'Hanken Grotesk';
     font-style: normal;
     font-weight: 600;
-    src: url('./fonts/ibm-plex-sans-v19-latin-600.woff2') format('woff2');
-}
-/* ibm-plex-sans-700 - latin */
-@font-face {
-    font-display: swap;
-    font-family: 'IBM Plex Sans';
-    font-style: normal;
-    font-weight: 700;
-    src: url('./fonts/ibm-plex-sans-v19-latin-700.woff2') format('woff2');
+    src: url('./fonts/hanken-grotesk-v12-latin-600.woff2') format('woff2');
 }
 
 :root {
-    --blue: #0273b2;
-    --blue-subtle: #dff4ff;
-    --orange: #b7510b;
+    --surface-page: #fffbf4;   /* warm cream page */
+    --surface-card: #f5f0e8;   /* slightly darker paper: buttons */
+    --text-headings: #2b2b2b;
+    --text-body: #2b2b2be6;    /* near-black at 90% */
+    --text-muted: #746960;     /* warm brown-gray */
+    --divider: #dad3c7;
+    --accent: #a87b4f;         /* tan ink: underlines, selection, name */
+    --accent-ink: #7a5330;     /* darker tan for small accent text (readable contrast) */
+    --accent-subtle: color-mix(in srgb, var(--accent) 16%, var(--surface-card));
+
+    /* Paper texture */
+    --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/></svg>");
+    --fiber: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='turbulence' baseFrequency='1.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.024'/></svg>");
+    --edge-shade: radial-gradient(140% 110% at 50% 0%, transparent 55%, #efe6d6 100%);
+
+    --font-heading: 'EB Garamond', Georgia, serif;
+    --font-body: 'Hanken Grotesk', system-ui, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 }
 
 * {
@@ -76,14 +99,40 @@
 }
 
 body {
-    font-family: 'IBM Plex Sans';
+    font-family: var(--font-body);
     font-size: 1.1em;
     line-height: 1.4;
-    color: #222222;
+    color: var(--text-body);
+    background-color: var(--surface-page);
+    background-image: var(--grain);
     max-width: 750px;
     margin: 2em auto;
     padding: 0 0.8em;
     overflow-y: scroll;
+}
+
+body::before, body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+}
+
+/* Edge shading: behind the content, in front of the grain */
+body::before {
+    z-index: -1;
+    background-image: var(--edge-shade);
+}
+
+/* Paper fibers: a faint sheet over the whole page */
+body::after {
+    z-index: 10;
+    background-image: var(--fiber);
+}
+
+::selection {
+    background-color: var(--accent);
+    color: var(--surface-page);
 }
 
 header {
@@ -94,11 +143,11 @@ header span {
     display: block;
     font-size: 1.25em;
     font-weight: 600;
-    color: var(--orange);
+    color: var(--accent);
 }
 
 nav a {
-    color: #222222;
+    color: var(--text-headings);
     text-decoration: none;
     padding-right: 0.4em;
     font-weight: 500;
@@ -106,12 +155,12 @@ nav a {
 
 nav a:hover, .nav-active {
     text-decoration: underline;
-    text-decoration-color: #222222;
+    text-decoration-color: var(--accent);
 }
 
 footer {
     font-size: 0.9em;
-    color: #666666;
+    color: var(--text-muted);
     margin-top: 1em;
 }
 
@@ -120,12 +169,12 @@ footer strong {
 }
 
 footer a {
-    color: #666666;
-    text-decoration-color: #eeeeee;
+    color: var(--text-muted);
+    text-decoration-color: var(--divider);
 }
 
 footer a:hover {
-    text-decoration-color: #666666;
+    text-decoration-color: var(--text-muted);
 }
 
 footer .icon-link {
@@ -134,7 +183,7 @@ footer .icon-link {
 }
 
 footer .icon-link:hover {
-    color: #222222;
+    color: var(--text-headings);
 }
 
 footer .icon-link svg {
@@ -145,16 +194,38 @@ footer .icon-link svg {
 
 footer i {
     font-style: normal;
-    color: #707070;
+    color: var(--text-muted);
     padding: 0 0.1em;
 }
 
 h1, h2, h3, h4 {
-    line-height: 1.2;
+    font-family: var(--font-heading);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--text-headings);
 }
 
-h2, h3 {
-    font-weight: 600;
+/* Ink-bleed: rough, slightly bled edges on serif text (SVG filter in base.html) */
+h1, h2, h3, h4 {
+    filter: url(#ink-bleed);
+}
+
+h1 {
+    font-size: 2.4em;
+    letter-spacing: -0.01em;
+}
+
+h2 {
+    font-size: 1.8em;
+    letter-spacing: -0.01em;
+}
+
+h3 {
+    font-size: 1.4em;
+}
+
+h4 {
+    font-size: 1.15em;
 }
 
 h2 {
@@ -181,11 +252,11 @@ table {
 }
 
 th, td {
-    border: 1px solid #dddddd;
+    border: 1px solid var(--divider);
 }
 
 th {
-    background-color: #f6f6f6;
+    background-color: var(--surface-page);
     padding: 0.25em 0.5em;
     text-align: left;
 }
@@ -202,11 +273,12 @@ pre {
     padding: 1em;
     margin: 1em 0;
     overflow-x: auto;
-    border: 1px solid #eee;
+    border: 1px solid var(--divider);
+    background-color: var(--surface-page) !important;
 }
 
 code {
-    font-family: 'IBM Plex Mono';
+    font-family: var(--font-mono);
     font-size: 0.9em;
     line-height: 1.1;
 }
@@ -214,7 +286,7 @@ code {
 img + em {
     display: block;
     text-align: center;
-    color: #666666;
+    color: var(--text-muted);
 }
 
 p {
@@ -223,10 +295,11 @@ p {
 }
 
 p code {
-    color: #666666;
+    color: var(--text-muted);
     font-weight: 500;
     padding: 0 0.3em;
-    border: 1px solid #eeeeee;
+    background-color: var(--surface-page);
+    border: 1px solid var(--divider);
     border-radius: 0.2em;
 }
 
@@ -236,15 +309,22 @@ sup {
 }
 
 a {
-    color: var(--blue);
-    text-decoration-color: var(--blue-subtle);
+    color: var(--text-headings);
+    text-decoration-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    text-underline-offset: 0.15em;
 }
 
 a:hover {
-    text-decoration-color: var(--blue);
+    color: var(--accent-ink);
+    text-decoration-color: var(--accent);
 }
 
 /* Home Page */
+#home h1 {
+    font-size: 3.2em;
+    margin-top: 0.1em;
+}
+
 #home .profile-picture {
     float: right;
     width: 180px;
@@ -253,7 +333,22 @@ a:hover {
     border-radius: 0.3em;
 }
 
+#home hr {
+    clear: both;
+    border: none;
+    border-top: 1px solid var(--divider);
+    margin-top: 2.5em;
+}
+
+#home hr + h2 {
+    margin-top: 0.8em;
+}
+
 @media (max-width: 500px) {
+    #home h1 {
+        font-size: 2.6em;
+    }
+
     #home .profile-picture {
         width: 120px;
         margin-left: 1em;
@@ -272,10 +367,15 @@ a:hover {
     margin: 0 auto;
 }
 
+#blog-page img, #projects img {
+    mix-blend-mode: multiply;
+}
+
 #blog-page .primary-button {
     display: block; 
     padding: 0.5em 4em; 
-    background-color: var(--blue-subtle);
+    background-color: var(--accent-subtle);
+    color: var(--accent-ink);
     font-weight: 500;
     border-radius: 3px; 
     text-align: center; 
@@ -284,23 +384,92 @@ a:hover {
 }
 
 #blog-page h3 {
-    color: #444444;
+    color: var(--text-body);
 }
 
-/* List of Blogs  */
-#blog ul {
-    list-style-type: none;
+/* List of Blogs: compact rows (square thumbnail beside the text) */
+#blog .posts {
+    list-style: none;
+    margin: 1em 0 2.5em;
 }
 
-#blog ul a {
-    color: #222222;
+#blog .post {
+    display: grid;
+    grid-template-columns: 124px 1fr;
+    gap: 1.3em;
+    align-items: start;
+    padding: 1.1em 0;
+    border-bottom: 1px solid var(--divider);
+}
+
+/* Cover in a paper frame; white diagram backgrounds blend into it */
+#blog .thumb {
+    position: relative;
+    display: block;
+    aspect-ratio: 1;
+    background-color: var(--surface-page);
+    border: 1px solid var(--divider);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+#blog .thumb img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding: 6%;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+}
+
+#blog .post-meta {
+    font-size: 0.85em;
+    color: var(--text-muted);
+}
+
+#blog .post h4 {
+    font-size: 1.25em;
+    margin: 0.1em 0 0.25em;
+}
+
+#blog .post h4 a {
+    color: var(--text-headings);
+    text-decoration: none;
+}
+
+#blog .post h4 a:hover {
     text-decoration: underline;
-    text-decoration-color: #cccccc;
+    text-decoration-color: var(--accent);
 }
 
-#blog ul span {
-    margin-left: 0.1em;
-    color: #999999;
+#blog .post p {
+    margin: 0;
+    text-align: justify;
+    font-size: 0.95em;
+}
+
+/* Phones: list layout, wide cover above the text, full description */
+@media (max-width: 500px) {
+    #blog .post {
+        grid-template-columns: 1fr;
+        gap: 0.8em;
+        padding: 0 0 2.2em;
+        border-bottom: none;
+    }
+
+    #blog .thumb {
+        aspect-ratio: 16 / 9;
+    }
+
+    #blog .thumb img {
+        padding: 8%;
+    }
+
+    #blog .post h4 {
+        font-size: 1.45em;
+        margin: 0.15em 0 0.35em;
+    }
 }
 
 /* List of Projects */
@@ -327,14 +496,15 @@ a:hover {
 #projects .links a {
     font-size: 0.9em;
     font-weight: 500;
+    color: var(--accent-ink);
     text-decoration: none;
     padding: 0.2em 0.8em;
-    background-color: var(--blue-subtle);
+    background-color: var(--accent-subtle);
     border-radius: 0.2em;
 }
 
 #projects .project-date {
-    color: #666666;
+    color: var(--text-muted);
     padding-left: 0.1em;
     font-size: 0.9em;
 }

@@ -7,7 +7,7 @@
 <meta name="description" content="Welcome to my little corner on the internet. Here you'll find my projects and writings on AI, ML and other things I find interesting.">
 
     <title>Arjun Balakrishnan</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://balkarjun.github.io/style.css?h=542a79affafa7649ab02">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VHRD5T5LV7"></script>
     <script>
@@ -19,6 +19,17 @@
     </script>
 </head>
 <body>
+    <!-- Ink-bleed filter for headings (see .css: filter: url(#ink-bleed)) -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <filter id="ink-bleed" x="-15%" y="-15%" width="130%" height="130%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4" result="noise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="1" result="disp"/>
+            <feComponentTransfer in="noise" result="stipple"><feFuncA type="linear" slope="20" intercept="-20"/></feComponentTransfer>
+            <feComposite in="disp" in2="stipple" operator="in" result="speckle"/>
+            <feMerge><feMergeNode in="speckle"/><feMergeNode in="disp"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+    </svg>
+
     
 <header>
     <span>Arjun Balakrishnan</span>
@@ -31,17 +42,17 @@
 
 <section id="home">
     <img class="profile-picture" src="/img/me.jpeg" alt="Photo of Me" width="480" height="640">
-    <h3 id="hey">Hey...</h3>
-<p>I'm Arjun.</p>
+    <h1 id="hey-i-m-arjun">Hey… <em>I'm Arjun.</em></h1>
 <p>This is my little corner where I write down my thoughts, learnings and experiments.</p>
 <p>I work as a Data Scientist, building solutions for identity verification and financial fraud-detection. I graduated with a Bachelor's from IIT Madras.</p>
 <p>I like stories of all kinds and the craft that goes into making them. I draw, read (currently on a sci-fi marathon) and watch tons of movies and shows. I've recently taken an interest in rock-climbing and I'm learning to play the classical guitar.</p>
 <p>I've tried various things over the years, like – starting a YouTube channel to teach programming, building a <a href="/projects/#taptrack">weight-tracking app</a> for iOS, a cryptography <a href="/projects/#ciphers">puzzle game</a> for iPad, and teaching Python as a TA at IIT Madras.</p>
 <p>Although developing and making use of AI tools is part of my day job, I share the growing disdain for AI, particularly for its ill use in the creative fields. As such I'm interested by projects like <a rel="noopener external" target="_blank" href="https://glaze.cs.uchicago.edu/">Glaze</a> and in discussions around AI regulation.</p>
 <p>Want to collaborate? Feel free to reach out using the contact info in the footer :)</p>
-<h3 id="colophon">Colophon</h3>
+<hr />
+<h2 id="colophon">Colophon</h2>
 <p>I write in Markdown and use <a rel="noopener external" target="_blank" href="https://www.getzola.org/">Zola SSG</a> to convert it to HTML and CSS. I try to avoid JavaScript when I can; I use just a <em>tiny</em> bit of it to measure page views.</p>
-<p>The fonts are IBM Plex Sans/Mono. All illustrations are mine, drawn using Procreate.</p>
+<p>The fonts are EB Garamond, Hanken Grotesk and IBM Plex Mono. All illustrations are mine, drawn using Procreate.</p>
 
 </section>
 
